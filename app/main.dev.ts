@@ -13,9 +13,9 @@ import { app, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
-import createServer from './main/server';
+import createServer from './main/proxy/server';
 
-const server = createServer();
+createServer();
 
 export default class AppUpdater {
   constructor() {

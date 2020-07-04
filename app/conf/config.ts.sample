@@ -1,0 +1,8 @@
+const config = {
+  TWITTER_CONSUMER_KEY: 'key',
+  TWITTER_CONSUMER_SECRET: 'key',
+  API_PATH: "/api",
+  SERVER_URL: "http://127.0.0.1:4200"
+};
+
+export default config;

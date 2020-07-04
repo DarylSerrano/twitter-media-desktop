@@ -10,6 +10,7 @@ export default function Home(): JSX.Element {
       <h2>Home</h2>
       <FetchTest />
       <Link to={routes.COUNTER}>to Counter</Link>
+      <Link to={routes.TIMELINE}>To timeline</Link>
     </div>
   );
 }

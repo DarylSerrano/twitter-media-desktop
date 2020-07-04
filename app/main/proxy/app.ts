@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import errorHandler from 'errorhandler';
 import router from './api';
+import config from '../../conf/config';
 
 // Create Express server
 const app = express();
@@ -12,7 +13,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/api', router);
+app.use(config.API_PATH, router);
 
 app.use(errorHandler());
 
