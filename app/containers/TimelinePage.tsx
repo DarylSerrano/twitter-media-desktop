@@ -1,6 +1,6 @@
 import React from 'react';
-import Tweet from '../components/Tweet';
+import Timeline from '../components/Timeline';
 
 export default function TimelinePage() {
-  return <Tweet />;
+  return <Timeline />;
 }

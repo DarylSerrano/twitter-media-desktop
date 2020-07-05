@@ -3,6 +3,7 @@
  *        See https://github.com/webpack-contrib/sass-loader#imports
  */
 @import '~@fortawesome/fontawesome-free/css/all.css';
+@import '~antd/dist/antd.css';
 
 body {
   position: relative;
@@ -15,7 +16,7 @@ body {
     rgba(0, 1, 127, 0.7)
   );
   font-family: Arial, Helvetica, Helvetica Neue, serif;
-  overflow-y: hidden;
+  overflow-y: auto;
 }
 
 h2 {
