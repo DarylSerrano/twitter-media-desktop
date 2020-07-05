@@ -7,7 +7,7 @@ import {
   ShareAltOutlined,
 } from '@ant-design/icons';
 
-import { Tweet } from '../../../data/Tweet';
+import { Tweet, Type } from '../../../data/Tweet';
 
 const { Meta } = Card;
 
@@ -20,7 +20,10 @@ export default function TweetMini({ content }: TweetMiniProps) {
       cover={
         <img
           alt="example"
-          src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+          src={
+            content.entities.media?.find((m) => m.type === Type.Photo)
+              ?.media_url_https
+          }
         />
       }
       actions={[
@@ -36,9 +39,26 @@ export default function TweetMini({ content }: TweetMiniProps) {
       ]}
     >
       <Meta
-        avatar={<Avatar src={content.user.profile_image_url_https} />}
-        title={content.user.name}
-        description={content.text}
+        avatar={
+          content.retweeted_status ? (
+            <Avatar
+              src={content.retweeted_status.user.profile_image_url_https}
+            />
+          ) : (
+            <Avatar src={content.user.profile_image_url_https} />
+          )
+        }
+        title={
+          content.retweeted_status
+            ? content.retweeted_status.user.name
+            : content.user.name
+        }
+        description={
+          content.retweeted_status
+            ? `${content.user.name} Retweeted
+        ${content.text}`
+            : content.text
+        }
       />
     </Card>
   );

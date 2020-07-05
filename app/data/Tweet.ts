@@ -23,7 +23,7 @@ export interface TweetEntities {
   symbols: any[];
   user_mentions: UserMention[];
   urls: any[];
-  media: PurpleMedia[];
+  media?: PurpleMedia[];
 }
 
 export interface Hashtag {
