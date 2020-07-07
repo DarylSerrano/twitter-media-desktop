@@ -5,6 +5,7 @@ import routes from './constants/routes.json';
 import App from './containers/App';
 import HomePage from './containers/HomePage';
 import TimelinePage from './containers/TimelinePage';
+import StatusPage from './containers/StatusPage';
 
 // Lazily load routes and code split with webpacck
 const LazyCounterPage = React.lazy(() =>
@@ -23,6 +24,7 @@ export default function Routes() {
       <Switch>
         <Route path={routes.TIMELINE} component={TimelinePage} />
         <Route path={routes.COUNTER} component={CounterPage} />
+        <Route path={routes.STATUS} component={StatusPage} />
         <Route exact path={routes.HOME} component={HomePage} />
       </Switch>
     </App>

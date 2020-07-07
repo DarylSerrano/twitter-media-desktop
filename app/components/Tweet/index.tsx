@@ -6,7 +6,7 @@ export default function Tweets() {
   const [resposeData, setResposeData] = useState<Tweet[] | null>(null);
 
   async function fetchTimeline() {
-    const url = new URL('http://127.0.0.1:4200/api/statuses/user_timeline');
+    const url = new URL('http://127.0.0.1:4200/api/statuses/show');
     url.searchParams.append('id', '2151128746');
     url.searchParams.append('count', '5');
     const response = await fetch(url.toString());

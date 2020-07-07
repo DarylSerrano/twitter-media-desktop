@@ -3,7 +3,7 @@ import { Row, Col, Spin, Space } from 'antd';
 import TweetMini from '../Tweet/Tweet-mini';
 import { Tweet, PurpleMedia, Type } from '../../data/Tweet';
 
-function onlyMedia(content: Tweet): boolean {
+export function onlyMedia(content: Tweet): boolean {
   // For now just only filer images
   const isPhoto = (media: PurpleMedia) => media.type === Type.Photo;
   return (

@@ -11,6 +11,7 @@ export default function Home(): JSX.Element {
       <FetchTest />
       <Link to={routes.COUNTER}>to Counter</Link>
       <Link to={routes.TIMELINE}>To timeline</Link>
+      <Link to="/status/1280592436658499584">A tweet</Link>
     </div>
   );
 }
