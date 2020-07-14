@@ -1,4 +1,6 @@
 /* eslint-disable react/jsx-wrap-multilines */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React from 'react';
 import { Card, Avatar, Button } from 'antd';
 import {
@@ -6,6 +8,7 @@ import {
   CommentOutlined,
   ShareAltOutlined,
 } from '@ant-design/icons';
+import { useHistory } from 'react-router-dom';
 
 import { Tweet, Type } from '../../../data/Tweet';
 
@@ -14,11 +17,18 @@ const { Meta } = Card;
 type TweetMiniProps = { content: Tweet };
 
 export default function TweetMini({ content }: TweetMiniProps) {
+  const history = useHistory();
+
+  function clickImage() {
+    history.push(`/status/${content.id_str}`);
+  }
+
   return (
     <Card
       hoverable
       cover={
         <img
+          onClick={clickImage}
           alt="example"
           src={
             content.entities.media?.find((m) => m.type === Type.Photo)

@@ -1,34 +1,40 @@
-import React, { useEffect, useState } from 'react';
-import { Card } from 'antd';
-import { Tweet } from '../../data/Tweet';
+import React from 'react';
+import { Button, Card, Carousel } from 'antd';
+import {
+  HeartOutlined,
+  CommentOutlined,
+  ShareAltOutlined,
+} from '@ant-design/icons';
 
-export default function Tweets() {
-  const [resposeData, setResposeData] = useState<Tweet[] | null>(null);
+import { Tweet, Type } from '../../data/Tweet';
 
-  async function fetchTimeline() {
-    const url = new URL('http://127.0.0.1:4200/api/statuses/show');
-    url.searchParams.append('id', '2151128746');
-    url.searchParams.append('count', '5');
-    const response = await fetch(url.toString());
-    const body = (await response.json()) as Tweet[];
-    setResposeData(body);
-  }
+type TweetProps = { content: Tweet };
 
-  useEffect(() => {
-    fetchTimeline();
-  });
-
-  if (!resposeData) {
-    return <p>Wait</p>;
-  }
-
+export default function Status({ content }: TweetProps) {
   return (
-    <div>
-      {resposeData.map((tweet) => (
-        <Card title="Tweet" key={tweet.id}>
-          <p>{tweet.text}</p>
-        </Card>
-      ))}
-    </div>
+    <Card
+      title={content.id_str}
+      actions={[
+        <Button key="Like" shape="round" icon={<HeartOutlined />}>
+          Like
+        </Button>,
+        <Button key="Reply" shape="round" icon={<CommentOutlined />}>
+          Reply
+        </Button>,
+        <Button key="Share" shape="round" icon={<ShareAltOutlined />}>
+          Share
+        </Button>,
+      ]}
+    >
+      <Carousel>
+        {content.entities.media
+          ?.filter((m) => m.type === Type.Photo)
+          .map((media) => (
+            <div key={media.id_str}>
+              <img alt={media.id_str} src={media.media_url_https} />
+            </div>
+          ))}
+      </Carousel>
+    </Card>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Result, Spin } from 'antd';
+import Status from '../components/Tweet';
 import { onlyMedia } from '../components/Timeline';
 
 import { Tweet } from '../data/Tweet';
@@ -21,7 +22,9 @@ export default function StatusPage() {
   }
 
   useEffect(() => {
-    fetchTweet();
+    if (!resposeData) {
+      fetchTweet();
+    }
   });
 
   if (!resposeData) {
@@ -29,7 +32,7 @@ export default function StatusPage() {
   }
 
   if (onlyMedia(resposeData)) {
-    return <p>Only media</p>;
+    return <Status content={resposeData} />;
   }
 
   return <Result title="No media tweet" status="error" />;

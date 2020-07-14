@@ -26,7 +26,7 @@ export default function Timeline() {
 
   useEffect(() => {
     fetchTimeline();
-  });
+  }, []);
 
   if (!resposeData) {
     return <Spin size="large" />;
