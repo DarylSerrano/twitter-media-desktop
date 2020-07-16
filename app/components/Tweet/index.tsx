@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Card, Carousel } from 'antd';
+import { Button, Card } from 'antd';
+import ImageGallery from 'react-image-gallery';
 import {
   HeartOutlined,
   CommentOutlined,
@@ -11,6 +12,26 @@ import { Tweet, Type } from '../../data/Tweet';
 type TweetProps = { content: Tweet };
 
 export default function Status({ content }: TweetProps) {
+  let entitiesMedia = content.entities.media
+    ? content.entities.media
+        .filter((m) => m.type === Type.Photo)
+        .map((media) => {
+          return {
+            original: media.media_url_https,
+          };
+        })
+    : [];
+
+  if (content.extended_entities) {
+    entitiesMedia = content.extended_entities.media
+      .filter((m) => m.type === Type.Photo)
+      .map((media) => {
+        return {
+          original: media.media_url_https,
+        };
+      });
+  }
+
   return (
     <Card
       title={content.id_str}
@@ -26,15 +47,7 @@ export default function Status({ content }: TweetProps) {
         </Button>,
       ]}
     >
-      <Carousel>
-        {content.entities.media
-          ?.filter((m) => m.type === Type.Photo)
-          .map((media) => (
-            <div key={media.id_str}>
-              <img alt={media.id_str} src={media.media_url_https} />
-            </div>
-          ))}
-      </Carousel>
+      <ImageGallery items={entitiesMedia} />
     </Card>
   );
 }

@@ -5,7 +5,7 @@ export interface Tweet {
   text: string;
   truncated: boolean;
   entities: TweetEntities;
-  extended_entities: TweetExtendedEntities;
+  extended_entities?: TweetExtendedEntities;
   source: string;
   user: User;
   is_quote_status: boolean;
