@@ -12,13 +12,27 @@ export function onlyMedia(content: Tweet): boolean {
   );
 }
 
-export default function Timeline() {
+enum TimelineState {
+  MOUNT,
+  INITIALIZED,
+}
+
+type TimelineProps = {
+  user_id: string;
+  screen_name?: string;
+  count: 5 | number;
+};
+
+export default function Timeline(props: TimelineProps) {
   const [resposeData, setResposeData] = useState<Tweet[] | null>(null);
+  const [status, setStatus] = useState(TimelineState.MOUNT);
+  const [sinceId, setSinceId] = useState('');
+  const [maxId, setMaxId] = useState('');
 
   async function fetchTimeline() {
     const url = new URL('http://127.0.0.1:4200/api/statuses/user_timeline');
-    url.searchParams.append('id', '389430988');
-    url.searchParams.append('count', '12');
+    url.searchParams.append('id', props.user_id);
+    url.searchParams.append('count', props.count.toString());
     const response = await fetch(url.toString());
     const body = (await response.json()) as Tweet[];
     setResposeData(body);

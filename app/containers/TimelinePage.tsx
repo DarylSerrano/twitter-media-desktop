@@ -2,5 +2,5 @@ import React from 'react';
 import Timeline from '../components/Timeline';
 
 export default function TimelinePage() {
-  return <Timeline />;
+  return <Timeline count={5} user_id="389430988" />;
 }
