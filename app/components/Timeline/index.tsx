@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Spin, Space, List, Button } from 'antd';
+import { RedoOutlined } from '@ant-design/icons';
 import TweetMini from '../Tweet/Tweet-mini';
 import { Tweet, PurpleMedia, Type } from '../../data/Tweet';
 
@@ -31,13 +32,17 @@ function getMaxId(statuses: Tweet[], previousMaxId?: number) {
 }
 
 function getSinceId(statuses: Tweet[], previousSinceId?: number) {
-  let minIdFetched = previousSinceId || 0;
+  let sinceIdFetched = previousSinceId || 0;
   statuses.forEach((tweet) => {
-    if (tweet.id > minIdFetched) {
-      minIdFetched = tweet.id;
+    console.log(`id: ${tweet.id}`);
+    if (tweet.id > sinceIdFetched) {
+      sinceIdFetched = tweet.id;
+      console.log(`id: ${tweet.id}`);
+      console.log(`string id: ${tweet.id_str}`);
     }
   });
-  return minIdFetched;
+  console.log(`sinceId: ${sinceIdFetched}`);
+  return sinceIdFetched;
 }
 
 enum TimelineState {
@@ -102,7 +107,24 @@ export default function Timeline(props: TimelineProps) {
     setMaxId(getMaxId(body, Number(maxId)).toString());
   };
 
-  const onUpdateStatus = async () => {};
+  const onUpdateStatus = async () => {
+    const url = new URL('http://127.0.0.1:4200/api/statuses/user_timeline');
+    url.searchParams.append('id', props.user_id);
+    url.searchParams.append('count', props.count.toString());
+    url.searchParams.append('since_id', sinceId);
+
+    setfetchState(FetchState.FETCHING);
+    const response = await fetch(url.toString());
+    const body: Tweet[] = await response.json();
+
+    setResposeData((previousData) => {
+      const newData: Tweet[] = JSON.parse(JSON.stringify(previousData));
+      newData.unshift(...body);
+      return newData;
+    });
+    setfetchState(FetchState.FETCHED);
+    setMaxId(getSinceId(body, Number(sinceId)).toString());
+  };
 
   useEffect(() => {
     // if (status === TimelineState.MOUNT)
@@ -127,7 +149,10 @@ export default function Timeline(props: TimelineProps) {
   }
 
   return (
-    <Space direction="vertical">
+    <Space direction="vertical" size="middle" align="center">
+      <Button icon={<RedoOutlined />} onClick={() => onUpdateStatus()}>
+        Update
+      </Button>
       <List
         loading={fetchState === FetchState.FETCHING}
         renderItem={(item: Tweet) => (
