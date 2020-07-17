@@ -15,7 +15,16 @@ const { Sider } = Layout;
 
 export default function Sidebar() {
   return (
-    <Sider collapsible>
+    <Sider
+      collapsible
+      style={{
+        overflow: 'auto',
+        height: '100vh',
+        position: 'sticky',
+        top: 0,
+        left: 0,
+      }}
+    >
       <div className={styles.logo} />
       <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
         <Menu.Item key="1" icon={<HomeOutlined />}>

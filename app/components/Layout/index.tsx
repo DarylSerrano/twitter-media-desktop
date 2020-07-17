@@ -16,7 +16,9 @@ export default function AppLayout(props: Props) {
     <Layout style={{ minHeight: '100vh' }}>
       <Sidebar />
       <Layout>
-        <Content style={{ margin: '0 18px' }}>{children}</Content>
+        <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
+          {children}
+        </Content>
         <BackTop />
       </Layout>
     </Layout>
