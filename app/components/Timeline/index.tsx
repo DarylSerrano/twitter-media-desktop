@@ -103,6 +103,7 @@ export default function Timeline(props: TimelineProps) {
       newData.push(...body);
       return newData;
     });
+
     setfetchState(FetchState.FETCHED);
     setMaxId(getMaxId(body, Number(maxId)).toString());
   };
@@ -123,7 +124,7 @@ export default function Timeline(props: TimelineProps) {
       return newData;
     });
     setfetchState(FetchState.FETCHED);
-    setMaxId(getSinceId(body, Number(sinceId)).toString());
+    setSinceId(getSinceId(body, Number(sinceId)).toString());
   };
 
   useEffect(() => {
