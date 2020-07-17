@@ -13,10 +13,10 @@ export default function AppLayout(props: Props) {
   const { children } = props;
 
   return (
-    <Layout>
+    <Layout style={{ minHeight: '100vh' }}>
       <Sidebar />
       <Layout>
-        <Content style={{ margin: '0 16px' }}>{children}</Content>
+        <Content style={{ margin: '0 18px' }}>{children}</Content>
       </Layout>
     </Layout>
   );
