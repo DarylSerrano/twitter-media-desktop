@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Layout } from 'antd';
+import { Layout, BackTop } from 'antd';
 
 import Sidebar from '../Sidebar';
 
@@ -17,6 +17,7 @@ export default function AppLayout(props: Props) {
       <Sidebar />
       <Layout>
         <Content style={{ margin: '0 18px' }}>{children}</Content>
+        <BackTop />
       </Layout>
     </Layout>
   );
