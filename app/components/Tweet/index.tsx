@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button, Card, notification } from 'antd';
+import React, { useState } from 'react';
+import { Button, Card, notification, Drawer, Progress } from 'antd';
 import ImageGallery from 'react-image-gallery';
 import { ShareAltOutlined, DownloadOutlined } from '@ant-design/icons';
 import { ipcRenderer } from 'electron';
@@ -14,7 +14,11 @@ import {
 
 type TweetProps = { content: Tweet };
 
+// TODO: Make ipcRenderer listen to channel +  remove listener on unmount
+
 export default function Status({ content }: TweetProps) {
+  const [isDrawerVisible, setIsDrawerVisible] = useState(false);
+
   const onDownload = async () => {
     try {
       const urls = content.entities.media
@@ -54,6 +58,9 @@ export default function Status({ content }: TweetProps) {
     }
   };
 
+  const onCloseDrawer = () => setIsDrawerVisible(false);
+  const onShowDrawer = () => setIsDrawerVisible(true);
+
   let entitiesMedia = content.entities.media
     ? content.entities.media
         .filter((m) => m.type === Type.Photo)
@@ -75,23 +82,35 @@ export default function Status({ content }: TweetProps) {
   }
 
   return (
-    <Card
-      title={content.id_str}
-      actions={[
-        <Button
-          key="Reply"
-          shape="round"
-          onClick={() => onDownload()}
-          icon={<DownloadOutlined />}
-        >
-          Download
-        </Button>,
-        <Button key="Share" shape="round" icon={<ShareAltOutlined />}>
-          Share
-        </Button>,
-      ]}
-    >
-      <ImageGallery items={entitiesMedia} />
-    </Card>
+    <>
+      <Button onClick={onShowDrawer}>Show drawer</Button>
+      <Card
+        title={content.id_str}
+        actions={[
+          <Button
+            key="Reply"
+            shape="round"
+            onClick={() => onDownload()}
+            icon={<DownloadOutlined />}
+          >
+            Download
+          </Button>,
+          <Button key="Share" shape="round" icon={<ShareAltOutlined />}>
+            Share
+          </Button>,
+        ]}
+      >
+        <ImageGallery items={entitiesMedia} />
+      </Card>
+      <Drawer
+        onClose={onCloseDrawer}
+        visible={isDrawerVisible}
+        mask={false}
+        placement="bottom"
+        title="Download status"
+      >
+        <Progress percent={50} status="active" />
+      </Drawer>
+    </>
   );
 }

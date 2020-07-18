@@ -12,6 +12,9 @@ function progressPublisher(progress: Progress) {
 }
 
 function downloadImages(win: BrowserWindow, url: string) {
+  // TODO: from url, get filename
+  // const filename = url.split('/').pop()
+  // TODO: calll (progress) => (progressPublisher(filename, progress))
   return download(win, url, { onProgress: progressPublisher });
 }
 
