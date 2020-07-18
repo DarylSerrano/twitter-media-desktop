@@ -14,7 +14,9 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import createServer from './main/proxy/server';
+import { setupListener } from './main/downloader';
 
+// Create twitter proxy server
 createServer();
 
 export default class AppUpdater {
@@ -120,3 +122,6 @@ app.on('activate', () => {
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) createWindow();
 });
+
+// Setup donwloader listener
+setupListener();
