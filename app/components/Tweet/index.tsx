@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Card, notification, Drawer, Progress } from 'antd';
 import ImageGallery from 'react-image-gallery';
 import { ShareAltOutlined, DownloadOutlined } from '@ant-design/icons';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, IpcRendererEvent } from 'electron';
 
 import { Tweet, Type } from '../../data/Tweet';
 import {
@@ -18,6 +18,22 @@ type TweetProps = { content: Tweet };
 
 export default function Status({ content }: TweetProps) {
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  const setupListeners = () => {
+    ipcRenderer.on(CHANNEL_NAME, (event: IpcRendererEvent, data) => {
+      const response: DownloadResponse = data;
+
+      if (response.status === DownloadActions.PROGRESS) {
+        const { progress: progressReceived = 0 } = response;
+        setProgress(progressReceived);
+      }
+    });
+  };
+
+  const unsetListeners = () => {
+    ipcRenderer.removeAllListeners(CHANNEL_NAME);
+  };
 
   const onDownload = async () => {
     try {
@@ -27,7 +43,7 @@ export default function Status({ content }: TweetProps) {
             .map((media) => media.media_url_https)
         : [];
 
-      // Potential flaw here
+      // FIXME: Potential flaw here
       const extendedUrls = content.extended_entities?.media
         ? content.extended_entities.media
             .filter((m) => m.type === Type.Photo)
@@ -52,6 +68,7 @@ export default function Status({ content }: TweetProps) {
         });
       } else {
         notification.success({ message: 'Success downloading' });
+        setProgress(100);
       }
     } catch (err) {
       notification.error({ message: JSON.stringify(err) });
@@ -60,6 +77,13 @@ export default function Status({ content }: TweetProps) {
 
   const onCloseDrawer = () => setIsDrawerVisible(false);
   const onShowDrawer = () => setIsDrawerVisible(true);
+
+  useEffect(() => {
+    setupListeners();
+    return () => {
+      unsetListeners();
+    };
+  }, []);
 
   let entitiesMedia = content.entities.media
     ? content.entities.media
@@ -109,7 +133,7 @@ export default function Status({ content }: TweetProps) {
         placement="bottom"
         title="Download status"
       >
-        <Progress percent={50} status="active" />
+        <Progress percent={progress} status="active" />
       </Drawer>
     </>
   );

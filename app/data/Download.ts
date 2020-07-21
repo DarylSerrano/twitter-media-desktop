@@ -14,4 +14,5 @@ export interface DownloadParams {
 export interface DownloadResponse {
   status: DownloadActions;
   message?: string;
+  progress?: number;
 }

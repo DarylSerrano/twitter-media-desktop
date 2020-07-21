@@ -1,4 +1,4 @@
-import { BrowserWindow, ipcMain } from 'electron';
+import { BrowserWindow, ipcMain, WebContents } from 'electron';
 import { download, Progress } from 'electron-dl';
 import {
   DownloadActions,
@@ -7,22 +7,30 @@ import {
   CHANNEL_NAME,
 } from '../../data/Download';
 
-function progressPublisher(progress: Progress) {
+function progressPublisher(webContent: WebContents, progress: Progress) {
+  const response: DownloadResponse = {
+    status: DownloadActions.PROGRESS,
+    progress: progress.percent,
+  };
+  webContent.send(CHANNEL_NAME, response);
   console.log(`Progress: ${JSON.stringify(progress)}`);
 }
 
 function downloadImages(win: BrowserWindow, url: string) {
   // TODO: from url, get filename
   // const filename = url.split('/').pop()
-  // TODO: calll (progress) => (progressPublisher(filename, progress))
-  return download(win, url, { onProgress: progressPublisher });
+  const { webContents } = win;
+  return download(win, url, {
+    onProgress: (progress) => progressPublisher(webContents, progress),
+  });
 }
 
 // eslint-disable-next-line import/prefer-default-export
 export function setupListener() {
   ipcMain.handle(CHANNEL_NAME, async (event, { mediaUrls }: DownloadParams) => {
     try {
-      const win = BrowserWindow.getFocusedWindow();
+      const win = BrowserWindow.fromWebContents(event.sender);
+
       const downloadActions = mediaUrls.map((url) => downloadImages(win, url));
 
       await Promise.all(downloadActions);
