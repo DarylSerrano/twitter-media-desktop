@@ -26,6 +26,7 @@ export default function TweetMini({ content }: TweetMiniProps) {
   return (
     <Card
       hoverable
+      size="small"
       cover={
         <img
           onClick={clickImage}
@@ -37,15 +38,9 @@ export default function TweetMini({ content }: TweetMiniProps) {
         />
       }
       actions={[
-        <Button key="Like" shape="round" icon={<HeartOutlined />}>
-          Like
-        </Button>,
-        <Button key="Reply" shape="round" icon={<CommentOutlined />}>
-          Reply
-        </Button>,
-        <Button key="Share" shape="round" icon={<ShareAltOutlined />}>
-          Share
-        </Button>,
+        <Button key="Like" shape="round" icon={<HeartOutlined />} />,
+        <Button key="Reply" shape="round" icon={<CommentOutlined />} />,
+        <Button key="Share" shape="round" icon={<ShareAltOutlined />} />,
       ]}
     >
       <Meta

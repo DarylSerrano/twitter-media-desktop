@@ -155,6 +155,15 @@ export default function Timeline(props: TimelineProps) {
         Update
       </Button>
       <List
+        grid={{
+          gutter: 12,
+          xs: 1,
+          sm: 2,
+          md: 4,
+          lg: 4,
+          xl: 6,
+          xxl: 3,
+        }}
         loading={fetchState === FetchState.FETCHING}
         renderItem={(item: Tweet) => (
           <List.Item>
