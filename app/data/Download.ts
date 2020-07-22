@@ -15,4 +15,5 @@ export interface DownloadResponse {
   status: DownloadActions;
   message?: string;
   progress?: number;
+  filename?: string;
 }

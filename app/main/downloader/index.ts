@@ -7,21 +7,44 @@ import {
   CHANNEL_NAME,
 } from '../../data/Download';
 
-function progressPublisher(webContent: WebContents, progress: Progress) {
+type ProgressPublisherOptions = {
+  webContents: WebContents;
+  progress: Progress;
+  filename: string;
+};
+
+function parseFilename(url: string) {
+  const filename = url.substring(url.lastIndexOf('/') + 1);
+  console.log(filename);
+  return filename;
+}
+
+function progressPublisher({
+  progress,
+  filename,
+  webContents: webContent,
+}: ProgressPublisherOptions) {
   const response: DownloadResponse = {
     status: DownloadActions.PROGRESS,
     progress: progress.percent,
+    filename,
   };
-  webContent.send(CHANNEL_NAME, response);
   console.log(`Progress: ${JSON.stringify(progress)}`);
+  webContent.send(CHANNEL_NAME, response);
 }
 
 function downloadImages(win: BrowserWindow, url: string) {
   // TODO: from url, get filename
   // const filename = url.split('/').pop()
   const { webContents } = win;
+  const filename = parseFilename(url);
   return download(win, url, {
-    onProgress: (progress) => progressPublisher(webContents, progress),
+    onProgress: (progress) =>
+      progressPublisher({
+        filename,
+        progress,
+        webContents,
+      }),
   });
 }
 
