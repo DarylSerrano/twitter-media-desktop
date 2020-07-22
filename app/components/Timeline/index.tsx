@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Spin, Space, List, Button } from 'antd';
+import { Spin, Space, List, Button } from 'antd';
 import { RedoOutlined } from '@ant-design/icons';
 import TweetMini from '../Tweet/Tweet-mini';
-import { Tweet, PurpleMedia, Type } from '../../data/Tweet';
+import { Tweet, Media, Type, Variant } from '../../data/Tweet';
+
+export const isVideo = (media: Media) =>
+  media.type === Type.AnimatedGif || media.type === Type.Video;
+
+export const isPhoto = (media: Media) => media.type === Type.Photo;
+
+export const isContentTypeVideo = (variant: Variant) =>
+  variant.content_type.includes('video/mp4');
 
 export function onlyMedia(content: Tweet): boolean {
-  // For now just only filer images
-  const isPhoto = (media: PurpleMedia) => media.type === Type.Photo;
-
   const isMedia =
     !!content.entities.media &&
     content.entities.media?.every((media) => isPhoto(media));
@@ -15,6 +20,31 @@ export function onlyMedia(content: Tweet): boolean {
   console.log(`isMedia: ${isMedia}`);
 
   return isMedia;
+}
+
+export function hasVideo(content: Tweet): boolean {
+  const hasVideoMedia =
+    !!content.extended_entities &&
+    content.extended_entities?.media.some((media) => isVideo(media));
+
+  return hasVideoMedia;
+}
+
+export function getVideoUrl(content: Tweet) {
+  const mediaFound = content.extended_entities?.media.find((media) =>
+    isVideo(media)
+  );
+
+  if (mediaFound) {
+    const variantFound = mediaFound.video_info?.variants.find((variant) =>
+      isContentTypeVideo(variant)
+    );
+    if (variantFound) {
+      return variantFound.url;
+    }
+  }
+
+  return undefined;
 }
 
 function getMaxId(statuses: Tweet[], previousMaxId?: number) {

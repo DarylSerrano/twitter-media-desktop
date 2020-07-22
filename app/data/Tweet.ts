@@ -23,7 +23,7 @@ export interface TweetEntities {
   symbols: any[];
   user_mentions: UserMention[];
   urls: any[];
-  media?: PurpleMedia[];
+  media?: Media[];
 }
 
 export interface Hashtag {
@@ -31,7 +31,7 @@ export interface Hashtag {
   indices: number[];
 }
 
-export interface PurpleMedia {
+export interface Media {
   id: number;
   id_str: string;
   indices: number[];
@@ -46,6 +46,36 @@ export interface PurpleMedia {
   source_status_id_str?: string;
   source_user_id?: number;
   source_user_id_str?: string;
+  video_info?: VideoInfo;
+}
+
+export interface MediaVideo {
+  id: number;
+  id_str: string;
+  indices: number[];
+  media_url: string;
+  media_url_https: string;
+  url: string;
+  display_url: string;
+  expanded_url: string;
+  type: Type;
+  sizes: Sizes;
+  source_status_id?: number;
+  source_status_id_str?: string;
+  source_user_id?: number;
+  source_user_id_str?: string;
+  video_info: VideoInfo;
+}
+
+export interface VideoInfo {
+  aspect_ratio: number[];
+  variants: Variant[];
+}
+
+export interface Variant {
+  bitrate: number;
+  content_type: string;
+  url: string;
 }
 
 export interface Sizes {
@@ -68,6 +98,8 @@ export enum Resize {
 
 export enum Type {
   Photo = 'photo',
+  Video = 'video',
+  AnimatedGif = 'animated_gif',
 }
 
 export interface UserMention {
@@ -79,7 +111,7 @@ export interface UserMention {
 }
 
 export interface TweetExtendedEntities {
-  media: PurpleMedia[];
+  media: Media[];
 }
 
 export interface RetweetedStatus {

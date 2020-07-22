@@ -4,6 +4,9 @@ import ImageGallery from 'react-image-gallery';
 import { ShareAltOutlined, DownloadOutlined } from '@ant-design/icons';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { Map } from 'immutable';
+import ResponsivePlayer from '../ResponsivePlayer';
+
+import { hasVideo, getVideoUrl } from '../Timeline';
 
 import { Tweet, Type } from '../../data/Tweet';
 import {
@@ -155,7 +158,11 @@ export default function Status({ content }: TweetProps) {
           </Button>,
         ]}
       >
-        <ImageGallery items={entitiesMedia} />
+        {hasVideo(content) ? (
+          <ResponsivePlayer url={getVideoUrl(content)} controls loop />
+        ) : (
+          <ImageGallery items={entitiesMedia} />
+        )}
       </Card>
       <Drawer
         onClose={onCloseDrawer}
