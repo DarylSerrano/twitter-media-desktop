@@ -99,9 +99,16 @@ export default function Timeline(props: TimelineProps) {
     const body: Tweet[] = await response.json();
 
     setResposeData((previousData) => {
-      const newData: Tweet[] = JSON.parse(JSON.stringify(previousData));
-      newData.push(...body);
-      return newData;
+      const oldStatus: Tweet[] = JSON.parse(JSON.stringify(previousData));
+      const filteredReceivedStatus = body.filter(
+        (newStatus) =>
+          !oldStatus.some(
+            (savedStatus) => savedStatus.id_str === newStatus.id_str
+          )
+      );
+      const newAndOldStatus = [...oldStatus, ...filteredReceivedStatus];
+
+      return newAndOldStatus;
     });
 
     setfetchState(FetchState.FETCHED);

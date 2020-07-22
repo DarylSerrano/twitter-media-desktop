@@ -281,6 +281,7 @@
     "electron-updater": "^4.3.1",
     "history": "4.7.2",
     "immutable": "^4.0.0-rc.12",
+    "moment": "^2.27.0",
     "react": "^16.13.1",
     "react-dom": "^16.12.0",
     "react-hot-loader": "^4.12.21",
