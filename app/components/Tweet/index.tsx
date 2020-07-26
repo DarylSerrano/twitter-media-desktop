@@ -20,21 +20,32 @@ type TweetProps = { content: Tweet };
 export default function Status({ content }: TweetProps) {
   const onDownload = async () => {
     try {
-      const urls = content.entities.media
-        ? content.entities.media
-            .filter((m) => m.type === Type.Photo)
-            .map((media) => media.media_url_https)
-        : [];
+      let urls: string[] = [];
 
-      // FIXME: Potential flaw here
-      const extendedUrls = content.extended_entities?.media
-        ? content.extended_entities.media
-            .filter((m) => m.type === Type.Photo)
-            .map((media) => media.media_url_https)
-        : [];
+      if (hasVideo(content)) {
+        const urlVideo = getVideoUrl(content);
+        if (urlVideo) {
+          urls.push(urlVideo);
+        }
+      } else {
+        if (content.entities.media) {
+          urls = urls.concat(
+            content.entities.media
+              .filter((m) => m.type === Type.Photo)
+              .map((media) => media.media_url_https)
+          );
+        }
 
-      // Add urls of extended_entities
-      urls.push(...extendedUrls);
+        // FIXME: Potential flaw here
+        const extendedUrls = content.extended_entities?.media
+          ? content.extended_entities.media
+              .filter((m) => m.type === Type.Photo)
+              .map((media) => media.media_url_https)
+          : [];
+
+        // Add urls of extended_entities
+        urls.push(...extendedUrls);
+      }
 
       const data: DownloadParams = {
         mediaUrls: urls,

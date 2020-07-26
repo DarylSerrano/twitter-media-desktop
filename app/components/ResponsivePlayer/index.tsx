@@ -23,6 +23,7 @@ export default function ResponsivePlayer({
         height="100%"
         controls={controls}
         loop={loop}
+        volume={1}
       />
     </div>
   );
