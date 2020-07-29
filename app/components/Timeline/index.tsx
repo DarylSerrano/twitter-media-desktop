@@ -22,6 +22,15 @@ export function onlyMedia(content: Tweet): boolean {
   return isMedia;
 }
 
+export function getStatusURL(content: Tweet) {
+  const media = content.entities.media?.slice().pop();
+  if (media) {
+    return media.expanded_url;
+  }
+
+  return undefined;
+}
+
 export function hasVideo(content: Tweet): boolean {
   const hasVideoMedia =
     !!content.extended_entities &&

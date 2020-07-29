@@ -1,11 +1,15 @@
 import React from 'react';
 import { Button, Card, notification } from 'antd';
 import ImageGallery from 'react-image-gallery';
-import { ShareAltOutlined, DownloadOutlined } from '@ant-design/icons';
-import { ipcRenderer } from 'electron';
+import {
+  ShareAltOutlined,
+  DownloadOutlined,
+  CopyOutlined,
+} from '@ant-design/icons';
+import { ipcRenderer, clipboard } from 'electron';
 import ResponsivePlayer from '../ResponsivePlayer';
 
-import { hasVideo, getVideoUrl } from '../Timeline';
+import { hasVideo, getVideoUrl, getStatusURL } from '../Timeline';
 
 import { Tweet, Type } from '../../data/Tweet';
 import {
@@ -68,6 +72,16 @@ export default function Status({ content }: TweetProps) {
     }
   };
 
+  const onCopy = () => {
+    const statusUrl = getStatusURL(content);
+    if (statusUrl) {
+      clipboard.writeText(statusUrl);
+      notification.success({ message: 'Copy link to clipboard' });
+    } else {
+      notification.warning({ message: 'Could not copy link to clipboard' });
+    }
+  };
+
   let entitiesMedia = content.entities.media
     ? content.entities.media
         .filter((m) => m.type === Type.Photo)
@@ -103,6 +117,14 @@ export default function Status({ content }: TweetProps) {
           </Button>,
           <Button key="Share" shape="round" icon={<ShareAltOutlined />}>
             Share
+          </Button>,
+          <Button
+            key="Copy"
+            onClick={onCopy}
+            shape="round"
+            icon={<CopyOutlined />}
+          >
+            Copy
           </Button>,
         ]}
       >
