@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Card, notification } from 'antd';
 import ImageGallery from 'react-image-gallery';
 import {
@@ -19,9 +19,13 @@ import {
   CHANNEL_NAME,
 } from '../../data/Download';
 
+import ShareModal from '../ShareModal';
+
 type TweetProps = { content: Tweet };
 
 export default function Status({ content }: TweetProps) {
+  const [modalVisible, setModalVisible] = useState(false);
+
   const onDownload = async () => {
     try {
       let urls: string[] = [];
@@ -104,6 +108,12 @@ export default function Status({ content }: TweetProps) {
 
   return (
     <>
+      <ShareModal
+        url={getStatusURL(content) || ''}
+        onOk={() => setModalVisible(false)}
+        onCancel={() => setModalVisible(false)}
+        visible={modalVisible}
+      />
       <Card
         title={content.id_str}
         actions={[
@@ -115,7 +125,12 @@ export default function Status({ content }: TweetProps) {
           >
             Download
           </Button>,
-          <Button key="Share" shape="round" icon={<ShareAltOutlined />}>
+          <Button
+            key="Share"
+            shape="round"
+            onClick={() => setModalVisible(true)}
+            icon={<ShareAltOutlined />}
+          >
             Share
           </Button>,
           <Button
