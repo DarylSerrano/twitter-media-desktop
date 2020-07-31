@@ -1,6 +1,5 @@
 {
   "HOME": "/",
-  "COUNTER": "/counter",
   "TIMELINE": "/timeline",
   "STATUS": "/status/:id"
 }

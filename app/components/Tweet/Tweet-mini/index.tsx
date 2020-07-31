@@ -10,7 +10,7 @@ import {
 } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
 
-import { Tweet, Type } from '../../../data/Tweet';
+import { Tweet, Type } from '../../../interfaces/Tweet';
 
 const { Meta } = Card;
 

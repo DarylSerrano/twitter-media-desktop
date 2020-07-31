@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Spin, Space, List, Button } from 'antd';
 import { RedoOutlined } from '@ant-design/icons';
 import TweetMini from '../Tweet/Tweet-mini';
-import { Tweet, Media, Type, Variant } from '../../data/Tweet';
+import { Tweet, Media, Type, Variant } from '../../interfaces/Tweet';
 
 export const isVideo = (media: Media) =>
   media.type === Type.AnimatedGif || media.type === Type.Video;

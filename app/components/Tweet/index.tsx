@@ -11,13 +11,13 @@ import ResponsivePlayer from '../ResponsivePlayer';
 
 import { hasVideo, getVideoUrl, getStatusURL } from '../Timeline';
 
-import { Tweet, Type } from '../../data/Tweet';
+import { Tweet, Type } from '../../interfaces/Tweet';
 import {
   DownloadParams,
   DownloadActions,
   DownloadResponse,
   CHANNEL_NAME,
-} from '../../data/Download';
+} from '../../interfaces/Download';
 
 import ShareModal from '../ShareModal';
 

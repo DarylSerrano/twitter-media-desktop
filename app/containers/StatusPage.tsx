@@ -4,7 +4,7 @@ import { Result, Spin } from 'antd';
 import Status from '../components/Tweet';
 import { onlyMedia } from '../components/Timeline';
 
-import { Tweet } from '../data/Tweet';
+import { Tweet } from '../interfaces/Tweet';
 
 type StatusParams = { id: string };
 
