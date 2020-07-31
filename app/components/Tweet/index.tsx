@@ -9,7 +9,7 @@ import {
 import { ipcRenderer, clipboard } from 'electron';
 import ResponsivePlayer from '../ResponsivePlayer';
 
-import { hasVideo, getVideoUrl, getStatusURL } from '../Timeline';
+import { hasVideo, getVideoUrl, getStatusURL } from '../../lib/TweetFiltering';
 
 import { Tweet, Type } from '../../interfaces/Tweet';
 import {
