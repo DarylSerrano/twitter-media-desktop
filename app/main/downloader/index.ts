@@ -5,7 +5,7 @@ import {
   DownloadParams,
   DownloadResponse,
   CHANNEL_NAME,
-} from '../../data/Download';
+} from '../../interfaces/Download';
 
 function downloadImages(win: BrowserWindow, url: string) {
   // TODO: from url, get filename

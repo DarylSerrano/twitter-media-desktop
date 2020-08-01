@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Result, Spin } from 'antd';
 import Status from '../components/Tweet';
-import { onlyMedia } from '../components/Timeline';
+import { isMedia } from '../lib/TweetFiltering';
 
-import { Tweet } from '../data/Tweet';
+import { Tweet } from '../interfaces/Tweet';
 
 type StatusParams = { id: string };
 
@@ -31,7 +31,7 @@ export default function StatusPage() {
     return <Spin size="large" />;
   }
 
-  if (onlyMedia(resposeData)) {
+  if (isMedia(resposeData)) {
     return <Status content={resposeData} />;
   }
 

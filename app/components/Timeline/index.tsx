@@ -2,92 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Spin, Space, List, Button } from 'antd';
 import { RedoOutlined } from '@ant-design/icons';
 import TweetMini from '../Tweet/Tweet-mini';
-import { Tweet, Media, Type, Variant } from '../../data/Tweet';
-
-export const isVideo = (media: Media) =>
-  media.type === Type.AnimatedGif || media.type === Type.Video;
-
-export const isPhoto = (media: Media) => media.type === Type.Photo;
-
-export const isContentTypeVideo = (variant: Variant) =>
-  variant.content_type.includes('video/mp4');
-
-export function onlyMedia(content: Tweet): boolean {
-  const isMedia =
-    !!content.entities.media &&
-    content.entities.media?.every((media) => isPhoto(media));
-
-  console.log(`isMedia: ${isMedia}`);
-
-  return isMedia;
-}
-
-export function getStatusURL(content: Tweet) {
-  const media = content.entities.media?.slice().pop();
-  if (media) {
-    return media.expanded_url;
-  }
-
-  return undefined;
-}
-
-export function hasVideo(content: Tweet): boolean {
-  const hasVideoMedia =
-    !!content.extended_entities &&
-    content.extended_entities?.media.some((media) => isVideo(media));
-
-  return hasVideoMedia;
-}
-
-export function getVideoUrl(content: Tweet) {
-  const mediaFound = content.extended_entities?.media.find((media) =>
-    isVideo(media)
-  );
-
-  if (mediaFound) {
-    const variantFound = mediaFound.video_info?.variants.find((variant) =>
-      isContentTypeVideo(variant)
-    );
-    if (variantFound) {
-      return variantFound.url;
-    }
-  }
-
-  return undefined;
-}
-
-function getMaxId(statuses: Tweet[], previousMaxId?: number) {
-  let maxIdFetched = previousMaxId || Number.MAX_VALUE;
-  statuses.forEach((tweet) => {
-    console.log(`id: ${tweet.id}`);
-    if (tweet.id < maxIdFetched) {
-      maxIdFetched = tweet.id;
-      console.log(`id: ${tweet.id}`);
-      console.log(`string id: ${tweet.id_str}`);
-    }
-  });
-  console.log(`maxid: ${maxIdFetched}`);
-  return maxIdFetched;
-}
-
-function getSinceId(statuses: Tweet[], previousSinceId?: number) {
-  let sinceIdFetched = previousSinceId || 0;
-  statuses.forEach((tweet) => {
-    console.log(`id: ${tweet.id}`);
-    if (tweet.id > sinceIdFetched) {
-      sinceIdFetched = tweet.id;
-      console.log(`id: ${tweet.id}`);
-      console.log(`string id: ${tweet.id_str}`);
-    }
-  });
-  console.log(`sinceId: ${sinceIdFetched}`);
-  return sinceIdFetched;
-}
-
-enum TimelineState {
-  MOUNT,
-  INITIALIZED,
-}
+import { Tweet } from '../../interfaces/Tweet';
+import { NavigatorType } from '../../interfaces/Timelines';
+import { filterMediaOnly } from '../../lib/TweetFiltering';
+import * as Navigator from '../../lib/TimelineNavigator';
 
 enum FetchState {
   FETCHING,
@@ -99,47 +17,48 @@ enum FetchState {
 type TimelineProps = {
   user_id: string;
   screen_name?: string;
-  count: 5 | number;
+  count?: number;
 };
 
 export default function Timeline(props: TimelineProps) {
   const [resposeData, setResposeData] = useState<Tweet[]>([]);
-  const [status, setStatus] = useState<TimelineState>(TimelineState.MOUNT);
   const [fetchState, setfetchState] = useState<FetchState>(FetchState.IDDLE);
-  const [sinceId, setSinceId] = useState('');
-  const [maxId, setMaxId] = useState('');
+  const [sinceId, setSinceId] = useState<number>(0);
+  const [maxId, setMaxId] = useState<number>(0);
 
   const fetchTimeline = async () => {
-    const url = new URL('http://127.0.0.1:4200/api/statuses/user_timeline');
-    url.searchParams.append('id', props.user_id);
-    url.searchParams.append('count', props.count.toString());
     setfetchState(FetchState.FETCHING);
 
-    const response = await fetch(url.toString());
-    const body: Tweet[] = await response.json();
+    const response = await Navigator.getStatus(
+      {
+        type: NavigatorType.USER_ID,
+        searchData: props.user_id,
+      },
+      {}
+    );
 
-    console.log(JSON.stringify(body));
+    console.log(JSON.stringify(response.data));
 
-    setResposeData(body);
-    setStatus(TimelineState.INITIALIZED);
+    setResposeData(response.data);
     setfetchState(FetchState.FETCHED);
-    setMaxId(getMaxId(body).toString());
-    setSinceId(getSinceId(body).toString());
+    setMaxId(response.maxId);
+    setSinceId(response.sinceId);
   };
 
   const onGetMoreStatus = async () => {
-    const url = new URL('http://127.0.0.1:4200/api/statuses/user_timeline');
-    url.searchParams.append('id', props.user_id);
-    url.searchParams.append('count', props.count.toString());
-    url.searchParams.append('max_id', maxId);
-
     setfetchState(FetchState.FETCHING);
-    const response = await fetch(url.toString());
-    const body: Tweet[] = await response.json();
+
+    const response = await Navigator.getOldStatus(
+      {
+        type: NavigatorType.USER_ID,
+        searchData: props.user_id,
+      },
+      { maxId }
+    );
 
     setResposeData((previousData) => {
       const oldStatus: Tweet[] = JSON.parse(JSON.stringify(previousData));
-      const filteredReceivedStatus = body.filter(
+      const filteredReceivedStatus = response.data.filter(
         (newStatus) =>
           !oldStatus.some(
             (savedStatus) => savedStatus.id_str === newStatus.id_str
@@ -151,30 +70,31 @@ export default function Timeline(props: TimelineProps) {
     });
 
     setfetchState(FetchState.FETCHED);
-    setMaxId(getMaxId(body, Number(maxId)).toString());
+    setMaxId(response.maxId);
   };
 
   const onUpdateStatus = async () => {
-    const url = new URL('http://127.0.0.1:4200/api/statuses/user_timeline');
-    url.searchParams.append('id', props.user_id);
-    url.searchParams.append('count', props.count.toString());
-    url.searchParams.append('since_id', sinceId);
-
     setfetchState(FetchState.FETCHING);
-    const response = await fetch(url.toString());
-    const body: Tweet[] = await response.json();
+
+    const response = await Navigator.getNewStatus(
+      {
+        type: NavigatorType.USER_ID,
+        searchData: props.user_id,
+      },
+      { sinceId }
+    );
 
     setResposeData((previousData) => {
       const newData: Tweet[] = JSON.parse(JSON.stringify(previousData));
-      newData.unshift(...body);
+      newData.unshift(...response.data);
       return newData;
     });
+
     setfetchState(FetchState.FETCHED);
-    setSinceId(getSinceId(body, Number(sinceId)).toString());
+    setSinceId(response.sinceId);
   };
 
   useEffect(() => {
-    // if (status === TimelineState.MOUNT)
     fetchTimeline();
   }, []);
 
@@ -217,9 +137,7 @@ export default function Timeline(props: TimelineProps) {
           </List.Item>
         )}
         loadMore={loadMore}
-        dataSource={resposeData.filter((contentToFilter) =>
-          onlyMedia(contentToFilter)
-        )}
+        dataSource={filterMediaOnly(resposeData)}
       />
     </Space>
   );
