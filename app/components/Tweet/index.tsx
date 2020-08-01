@@ -9,9 +9,15 @@ import {
 import { ipcRenderer, clipboard } from 'electron';
 import ResponsivePlayer from '../ResponsivePlayer';
 
-import { hasVideo, getVideoUrl, getStatusURL } from '../../lib/TweetFiltering';
+import {
+  hasVideo,
+  getVideoUrl,
+  getStatusURL,
+  getImageUrls,
+  getGalleryData,
+} from '../../lib/TweetFiltering';
 
-import { Tweet, Type } from '../../interfaces/Tweet';
+import { Tweet } from '../../interfaces/Tweet';
 import {
   DownloadParams,
   DownloadActions,
@@ -28,7 +34,7 @@ export default function Status({ content }: TweetProps) {
 
   const onDownload = async () => {
     try {
-      let urls: string[] = [];
+      const urls: string[] = [];
 
       if (hasVideo(content)) {
         const urlVideo = getVideoUrl(content);
@@ -36,23 +42,7 @@ export default function Status({ content }: TweetProps) {
           urls.push(urlVideo);
         }
       } else {
-        if (content.entities.media) {
-          urls = urls.concat(
-            content.entities.media
-              .filter((m) => m.type === Type.Photo)
-              .map((media) => media.media_url_https)
-          );
-        }
-
-        // FIXME: Potential flaw here
-        const extendedUrls = content.extended_entities?.media
-          ? content.extended_entities.media
-              .filter((m) => m.type === Type.Photo)
-              .map((media) => media.media_url_https)
-          : [];
-
-        // Add urls of extended_entities
-        urls.push(...extendedUrls);
+        urls.push(...getImageUrls(content));
       }
 
       const data: DownloadParams = {
@@ -85,26 +75,6 @@ export default function Status({ content }: TweetProps) {
       notification.warning({ message: 'Could not copy link to clipboard' });
     }
   };
-
-  let entitiesMedia = content.entities.media
-    ? content.entities.media
-        .filter((m) => m.type === Type.Photo)
-        .map((media) => {
-          return {
-            original: media.media_url_https,
-          };
-        })
-    : [];
-
-  if (content.extended_entities) {
-    entitiesMedia = content.extended_entities.media
-      .filter((m) => m.type === Type.Photo)
-      .map((media) => {
-        return {
-          original: media.media_url_https,
-        };
-      });
-  }
 
   return (
     <>
@@ -146,7 +116,7 @@ export default function Status({ content }: TweetProps) {
         {hasVideo(content) ? (
           <ResponsivePlayer url={getVideoUrl(content)} controls loop />
         ) : (
-          <ImageGallery items={entitiesMedia} />
+          <ImageGallery items={getGalleryData(content)} />
         )}
       </Card>
     </>

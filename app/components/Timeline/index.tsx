@@ -4,7 +4,7 @@ import { RedoOutlined } from '@ant-design/icons';
 import TweetMini from '../Tweet/Tweet-mini';
 import { Tweet } from '../../interfaces/Tweet';
 import { NavigatorType } from '../../interfaces/Timelines';
-import { isMedia } from '../../lib/TweetFiltering';
+import { filterMediaOnly } from '../../lib/TweetFiltering';
 import * as Navigator from '../../lib/TimelineNavigator';
 
 enum FetchState {
@@ -137,9 +137,7 @@ export default function Timeline(props: TimelineProps) {
           </List.Item>
         )}
         loadMore={loadMore}
-        dataSource={resposeData.filter((contentToFilter) =>
-          isMedia(contentToFilter)
-        )}
+        dataSource={filterMediaOnly(resposeData)}
       />
     </Space>
   );

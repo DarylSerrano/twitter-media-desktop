@@ -46,6 +46,28 @@ export function getVideoUrl(content: Tweet) {
   return undefined;
 }
 
+export function getImageUrls(content: Tweet) {
+  const urls: string[] = [];
+
+  const extendedUrls = content.extended_entities?.media
+    ? content.extended_entities.media
+        .filter((m) => isPhoto(m))
+        .map((media) => media.media_url_https)
+    : [];
+
+  // Add urls of extended_entities
+  urls.push(...extendedUrls);
+
+  return urls;
+}
+
 export function filterMediaOnly(content: Tweet[]) {
   return content.filter((contentToFilter) => isMedia(contentToFilter));
+}
+
+export function getGalleryData(content: Tweet) {
+  const galleryData = getImageUrls(content).map((url) => ({
+    original: url,
+  }));
+  return galleryData;
 }
