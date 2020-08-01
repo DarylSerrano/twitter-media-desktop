@@ -5,9 +5,19 @@ import {
 } from '../interfaces/Timelines';
 import TimelineFetcherFactory from './TimelineFetcherFactory';
 
+type GetNewStatusParams = {
+  count?: number;
+  sinceId: number;
+};
+
+type GetOldStatusParam = {
+  count?: number;
+  maxId: number;
+};
+
 export async function getNewStatus(
   options: TimelineNavigationParams,
-  { count = 5, sinceId }: FetchOptions
+  { count, sinceId }: GetNewStatusParams
 ) {
   const result = await TimelineFetcherFactory.CreateFetcher(options).fetch({
     count,
@@ -19,7 +29,7 @@ export async function getNewStatus(
 
 export async function getOldStatus(
   options: TimelineNavigationParams,
-  { count = 5, maxId }: FetchOptions
+  { count, maxId }: GetOldStatusParam
 ) {
   const result = await TimelineFetcherFactory.CreateFetcher(options).fetch({
     count,
@@ -31,15 +41,11 @@ export async function getOldStatus(
 
 export async function getStatus(
   options: TimelineNavigationParams,
-  { count = 5, maxId, sinceId }: FetchOptions
+  fetchOptions: FetchOptions
 ) {
   const result: FetchResult = await TimelineFetcherFactory.CreateFetcher(
     options
-  ).fetch({
-    count,
-    maxId,
-    sinceId,
-  });
+  ).fetch(fetchOptions);
 
   return result;
 }
