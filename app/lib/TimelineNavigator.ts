@@ -1,58 +1,45 @@
-import { FetchOptions, FetchResult } from '../interfaces/Timelines';
+import {
+  FetchOptions,
+  FetchResult,
+  TimelineNavigationParams,
+} from '../interfaces/Timelines';
 import TimelineFetcherFactory from './TimelineFetcherFactory';
 
-export default class TimelineNavigator {
-  private static async retrieveDesiredNumberOfStatus() {}
+export async function getNewStatus(
+  options: TimelineNavigationParams,
+  { count = 5, sinceId }: FetchOptions
+) {
+  const result = await TimelineFetcherFactory.CreateFetcher(options).fetch({
+    count,
+    sinceId,
+  });
 
-  public static async getStatus({
-    userId,
-    screenName,
-    options,
-  }: {
-    userId?: string;
-    screenName?: string;
-    options: FetchOptions;
-  }) {
-    const result = await TimelineFetcherFactory.CreateFetcher(
-      userId,
-      screenName
-    ).fetch(options);
+  return result;
+}
 
-    // Filter and get only count of media, if not have count==data.length, retrieve old status
-    const retrieved = result.data.length;
-    const count = options.count || 5;
-    if (retrieved < count) {
-      TimelineNavigator.retrieveDesiredNumberOfStatus();
-    }
+export async function getOldStatus(
+  options: TimelineNavigationParams,
+  { count = 5, maxId }: FetchOptions
+) {
+  const result = await TimelineFetcherFactory.CreateFetcher(options).fetch({
+    count,
+    maxId,
+  });
 
-    return result;
-  }
+  return result;
+}
 
-  public static async getNewStatus(
-    userId?: string,
-    screenName?: string,
-    count = 5,
-    sinceId?: number
-  ) {
-    const result = await TimelineFetcherFactory.CreateFetcher(
-      userId,
-      screenName
-    ).fetch({ count, sinceId });
+export async function getStatus(
+  options: TimelineNavigationParams,
+  { count = 5, maxId, sinceId }: FetchOptions
+) {
+  const result: FetchResult = await TimelineFetcherFactory.CreateFetcher(
+    options
+  ).fetch({
+    count,
+    maxId,
+    sinceId,
+  });
 
-    return result;
-  }
-
-  public static async getOldStatus(
-    userId?: string,
-    screenName?: string,
-    count = 5,
-    maxId?: number
-  ) {
-    const result = await TimelineFetcherFactory.CreateFetcher(
-      userId,
-      screenName
-    ).fetch({ count, maxId });
-
-    return result;
-  }
+  return result;
 }

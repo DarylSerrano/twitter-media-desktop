@@ -21,3 +21,13 @@ export interface FetchResult {
 export interface Fetchable<T, V> {
   fetch: (options: T) => Promise<V>;
 }
+
+export enum NavigatorType {
+  SCREEN_NAME,
+  USER_ID,
+}
+
+export interface TimelineNavigationParams {
+  type: NavigatorType;
+  searchData: string;
+}

@@ -45,3 +45,7 @@ export function getVideoUrl(content: Tweet) {
 
   return undefined;
 }
+
+export function filterMediaOnly(content: Tweet[]) {
+  return content.filter((contentToFilter) => isMedia(contentToFilter));
+}
