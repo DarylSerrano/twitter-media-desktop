@@ -10,7 +10,7 @@ export const isContentTypeVideo = (variant: Variant) =>
 
 export const isMedia = (content: Tweet) =>
   !!content.entities.media &&
-  content.entities.media?.every((media) => isPhoto(media));
+  content.entities.media?.every((media) => isPhoto(media) || isVideo(media));
 
 export function getStatusURL(content: Tweet) {
   const media = content.entities.media?.slice().pop();
