@@ -1,6 +1,7 @@
 import { Response, Request, Router, NextFunction } from 'express';
 import TwitterClient from './TwitterClient';
-import config from '../../conf/config';
+// import config from '../../conf/config';
+import config from './ProxyConfig';
 
 interface TwitterError {
   code: number;

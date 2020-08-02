@@ -3,7 +3,8 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import errorHandler from 'errorhandler';
 import router from './api';
-import config from '../../conf/config';
+// import config from '../../conf/config';
+import config from './ProxyConfig';
 
 // Create Express server
 const app = express();
