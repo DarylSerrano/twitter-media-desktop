@@ -1,5 +1,6 @@
 {
   "HOME": "/",
   "TIMELINE": "/timeline",
-  "STATUS": "/status/:id"
+  "STATUS": "/status/:id",
+  "LOGIN_SUCCESS": "/loginSucess"
 }
