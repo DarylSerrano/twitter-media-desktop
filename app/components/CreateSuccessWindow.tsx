@@ -1,12 +1,14 @@
 import React from 'react';
 import { Button } from 'antd';
-import { ipcRenderer } from 'electron';
+import { remote } from 'electron';
 
 export default function CreateSuccessWindow() {
   const onClick = async () => {
-    const res = await ipcRenderer.invoke('CREATE_LOGIN');
-
-    console.log(res);
+    remote.dialog.showMessageBox({
+      type: 'info',
+      message: 'Sucessfully loged in',
+      buttons: ['OK'],
+    });
   };
 
   return (

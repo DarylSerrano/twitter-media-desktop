@@ -15,6 +15,7 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import createServer from './main/proxy/server';
 import { setupListener } from './main/downloader';
+import { CHANNEL_NAME } from './interfaces/Login';
 
 import routes from './constants/routes.json';
 
@@ -128,39 +129,9 @@ app.on('activate', () => {
 // Setup donwloader listener
 setupListener();
 
-const createSucessWindow = async () => {
-  const newWindow = new BrowserWindow({
-    show: false,
-    width: 1024,
-    height: 728,
-    webPreferences:
-      (process.env.NODE_ENV === 'development' ||
-        process.env.E2E_BUILD === 'true') &&
-      process.env.ERB_SECURE !== 'true'
-        ? {
-            nodeIntegration: true,
-          }
-        : {
-            preload: path.join(__dirname, 'dist/renderer.prod.js'),
-          },
-  });
-  newWindow.loadURL(``);
-
-  newWindow.webContents.on('did-finish-load', () => {
-    if (!newWindow) {
-      throw new Error('"mainWindow" is not defined');
-    }
-    if (process.env.START_MINIMIZED) {
-      newWindow.minimize();
-    } else {
-      newWindow.show();
-      newWindow.focus();
-    }
-  });
-};
-
 // setupSucessLoginHandler
-ipcMain.handle('CREATE_LOGIN', async () => {
-  await createSucessWindow();
+ipcMain.handle(CHANNEL_NAME, async () => {
+
+  // TODO:
   return 'Ok';
 });
