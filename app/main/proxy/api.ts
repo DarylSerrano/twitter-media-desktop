@@ -44,7 +44,7 @@ router.get('/*', async (req: Request, res: Response, next: NextFunction) => {
 
   if (TwitterClient.isAuth()) {
     try {
-      const data = await TwitterClient.app?.get(url, req.query);
+      const data = await TwitterClient.twitterApp?.get(url, req.query);
       res.send(data || {});
       return;
     } catch (err) {
@@ -62,7 +62,7 @@ router.post('/*', async (req: Request, res: Response, next: NextFunction) => {
 
   if (TwitterClient.isAuth()) {
     try {
-      const data = await TwitterClient.app?.post(url, req.body);
+      const data = await TwitterClient.twitterApp?.post(url, req.body);
       res.send(data || {});
       return;
     } catch (err) {
