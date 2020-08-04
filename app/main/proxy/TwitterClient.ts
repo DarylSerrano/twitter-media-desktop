@@ -102,7 +102,7 @@ class Client {
   async isUserCredentialsCorrect() {
     try {
       if (this.twitterUser) {
-        await this.twitterUser.get('account/verify_credential');
+        await this.twitterUser.get('account/verify_credentials');
         return true;
       }
       return false;
