@@ -9,13 +9,17 @@
  * `./app/main.prod.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
-import createServer from './main/server';
+import createServer from './lib/main/proxy/server';
+import { setupListener } from './lib/main/downloader';
+import { CHANNEL_NAME } from './interfaces/Login';
+import TwitterClient from './lib/main/proxy/TwitterClient';
 
-const server = createServer();
+// Create twitter proxy server
+createServer();
 
 export default class AppUpdater {
   constructor() {
@@ -119,4 +123,14 @@ app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) createWindow();
+});
+
+// Setup donwloader listener
+setupListener();
+
+// setupSucessLoginHandler
+ipcMain.handle(CHANNEL_NAME, async () => {
+  await TwitterClient.userLogin();
+
+  return 'Ok';
 });

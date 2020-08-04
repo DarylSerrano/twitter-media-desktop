@@ -3,8 +3,10 @@
  *        See https://github.com/webpack-contrib/sass-loader#imports
  */
 @import '~@fortawesome/fontawesome-free/css/all.css';
+@import '~antd/dist/antd.css';
+@import '~react-image-gallery/styles/css/image-gallery.css';
 
-body {
+/* body {
   position: relative;
   color: white;
   height: 100vh;
@@ -15,7 +17,7 @@ body {
     rgba(0, 1, 127, 0.7)
   );
   font-family: Arial, Helvetica, Helvetica Neue, serif;
-  overflow-y: hidden;
+  overflow-y: auto;
 }
 
 h2 {
@@ -44,4 +46,4 @@ a:hover {
   opacity: 1;
   text-decoration: none;
   cursor: pointer;
-}
+} */
