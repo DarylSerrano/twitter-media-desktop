@@ -2,7 +2,7 @@
 
 Desktop app for displaying media only.
 
-Made with [electron-react-boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate)
+Made with [electron-react-boilerplate ver 1.2.0](https://github.com/electron-react-boilerplate/electron-react-boilerplate)
 
 # Caveats
 
