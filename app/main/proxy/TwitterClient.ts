@@ -6,6 +6,10 @@ import Storage from 'electron-json-storage';
 import { dialog, app, BrowserWindow } from 'electron';
 import { promisify } from 'util';
 import config from './ProxyConfig';
+import { ClientAuthInformation } from '../../interfaces/Login';
+
+const storageHas = promisify<string, boolean>(Storage.has);
+const storageGet = promisify(Storage.get);
 
 type StorageAPIKEYS = {
   TWITTER_CONSUMER_KEY: string;
@@ -27,8 +31,6 @@ class Client {
   constructor() {}
 
   async start() {
-    const storageHas = promisify<string, boolean>(Storage.has);
-    const storageGet = promisify(Storage.get);
     const hasApiKeys = await storageHas('API_KEYS');
 
     if (!hasApiKeys) {
@@ -84,13 +86,34 @@ class Client {
     }
   }
 
-  setupUserClient(accessTokenKey: string, accessTokenSecret: string) {
+  async setupUserClient({ accTkn, accTknSecret }: ClientAuthInformation) {
     this.twitterUser = new Twitter({
       consumer_key: this.TWITTER_CONSUMER_KEY,
       consumer_secret: this.TWITTER_CONSUMER_SECRET,
-      access_token_key: accessTokenKey,
-      access_token_secret: accessTokenSecret,
+      access_token_key: accTkn,
+      access_token_secret: accTknSecret,
     });
+
+    if (!(await this.isUserCredentialsCorrect())) {
+      throw new Error('User credentials arent correct');
+    }
+  }
+
+  async isUserCredentialsCorrect() {
+    try {
+      if (this.twitterUser) {
+        await this.twitterUser.get('account/verify_credential');
+        return true;
+      }
+      return false;
+    } catch (error) {
+      if ('errors' in error) {
+        if (error.errors[0].code === 401) {
+          return false;
+        }
+      }
+      throw error;
+    }
   }
 }
 

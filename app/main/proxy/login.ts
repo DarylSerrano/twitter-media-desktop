@@ -38,14 +38,17 @@ router.get(
         }
       );
 
-      const resObject = {
+      // const resObject = {
+      //   accTkn: accesTokenResponse.oauth_token,
+      //   accTknSecret: accesTokenResponse.oauth_token_secret,
+      //   userId: accesTokenResponse.user_id,
+      //   screenName: accesTokenResponse.screen_name,
+      // };
+
+      TwitterClient.setupUserClient({
         accTkn: accesTokenResponse.oauth_token,
         accTknSecret: accesTokenResponse.oauth_token_secret,
-        userId: accesTokenResponse.user_id,
-        screenName: accesTokenResponse.screen_name,
-      };
-
-      TwitterClient.setupUserClient(resObject.accTkn, resObject.accTknSecret);
+      });
 
       return res.status(200).send({ status: 200, data: 'Good' });
     }
