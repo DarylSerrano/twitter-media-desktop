@@ -21,7 +21,7 @@ type TestTimelineProps = {
   count?: number;
 };
 
-export default function TestTimeline(props: TestTimelineProps) {
+export default function HomeTimeline(props: TestTimelineProps) {
   const [resposeData, setResposeData] = useState<Tweet[]>([]);
   const [fetchState, setfetchState] = useState<FetchState>(FetchState.IDDLE);
   const [sinceId, setSinceId] = useState<number>(0);
