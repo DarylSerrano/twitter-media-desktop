@@ -13,10 +13,10 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
-import createServer from './main/proxy/server';
-import { setupListener } from './main/downloader';
+import createServer from './lib/main/proxy/server';
+import { setupListener } from './lib/main/downloader';
 import { CHANNEL_NAME } from './interfaces/Login';
-import TwitterClient from './main/proxy/TwitterClient';
+import TwitterClient from './lib/main/proxy/TwitterClient';
 
 // Create twitter proxy server
 createServer();

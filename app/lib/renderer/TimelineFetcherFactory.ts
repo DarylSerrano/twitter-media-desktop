@@ -4,7 +4,7 @@ import {
   FetchResult,
   NavigatorType,
   TimelineNavigationParams,
-} from '../interfaces/Timelines';
+} from '../../interfaces/Timelines';
 import TimelineScreenNameFetcher from './TimelineScreenNameFetcher';
 import TimelineUserIdFetcher from './TimelineUserIdFetcher';
 import TimelineLoggedUser from './TimelineLoggedUser';

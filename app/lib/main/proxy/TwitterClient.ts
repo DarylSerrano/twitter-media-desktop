@@ -6,7 +6,7 @@ import Storage from 'electron-json-storage';
 import { dialog, app, BrowserWindow } from 'electron';
 import { promisify } from 'util';
 import config from './ProxyConfig';
-import { ClientAuthInformation } from '../../interfaces/Login';
+import { ClientAuthInformation } from '../../../interfaces/Login';
 
 const storageHas = promisify<string, boolean>(Storage.has);
 const storageGet = promisify(Storage.get);

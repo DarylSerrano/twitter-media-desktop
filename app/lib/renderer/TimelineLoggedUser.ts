@@ -1,5 +1,9 @@
 /* eslint-disable class-methods-use-this */
-import { FetchResult, FetchOptions, Fetchable } from '../interfaces/Timelines';
+import {
+  FetchResult,
+  FetchOptions,
+  Fetchable,
+} from '../../interfaces/Timelines';
 import { getMaxId, getSinceId, makefetchTimeline } from './TimelineFetch';
 
 export default class TimelineLoggedUser

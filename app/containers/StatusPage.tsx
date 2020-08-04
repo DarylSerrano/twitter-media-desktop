@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Result, Spin } from 'antd';
 import Status from '../components/Tweet';
-import { isMedia } from '../lib/TweetFiltering';
+import { isMedia } from '../lib/renderer/TweetFiltering';
 
 import { Tweet } from '../interfaces/Tweet';
 

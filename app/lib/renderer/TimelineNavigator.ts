@@ -2,7 +2,7 @@ import {
   FetchOptions,
   FetchResult,
   TimelineNavigationParams,
-} from '../interfaces/Timelines';
+} from '../../interfaces/Timelines';
 import TimelineFetcherFactory from './TimelineFetcherFactory';
 
 type GetNewStatusParams = {

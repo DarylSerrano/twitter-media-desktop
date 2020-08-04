@@ -1,4 +1,4 @@
-import { Tweet, Media, Type, Variant } from '../interfaces/Tweet';
+import { Tweet, Media, Type, Variant } from '../../interfaces/Tweet';
 
 export const isVideo = (media: Media) =>
   media.type === Type.AnimatedGif || media.type === Type.Video;

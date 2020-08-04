@@ -15,7 +15,7 @@ import {
   getStatusURL,
   getImageUrls,
   getGalleryData,
-} from '../../lib/TweetFiltering';
+} from '../../lib/renderer/TweetFiltering';
 
 import { Tweet } from '../../interfaces/Tweet';
 import {
