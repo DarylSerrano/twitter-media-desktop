@@ -34,10 +34,6 @@ function errorHandler(err: Error, res: Response, next: NextFunction) {
 
 const router = Router();
 
-router.get('/test', async (_req: Request, res: Response) => {
-  res.status(200).json({ status: 200, data: 'Good' });
-});
-
 router.get(
   '/statuses/home_timeline',
   async (req: Request, res: Response, next: NextFunction) => {

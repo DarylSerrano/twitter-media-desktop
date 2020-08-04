@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Response, Request, Router, NextFunction } from 'express';
 import TwitterClient from './TwitterClient';
 
@@ -9,13 +10,9 @@ type AuthorizationQuery = {
 
 const router = Router();
 
-router.get('/test', async (req: Request, res: Response, next: NextFunction) => {
-  return res.status(200).json({ status: 200, data: 'Good' });
-});
-
 router.get(
   `/callback`,
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, _next: NextFunction) => {
     if (TwitterClient.twitterApp) {
       const {
         oauth_token: oauthToken,
@@ -37,13 +34,6 @@ router.get(
           oauth_verifier: oauthVerifier,
         }
       );
-
-      // const resObject = {
-      //   accTkn: accesTokenResponse.oauth_token,
-      //   accTknSecret: accesTokenResponse.oauth_token_secret,
-      //   userId: accesTokenResponse.user_id,
-      //   screenName: accesTokenResponse.screen_name,
-      // };
 
       TwitterClient.setupUserClient({
         accTkn: accesTokenResponse.oauth_token,
