@@ -19,16 +19,25 @@ export function setupListener() {
     try {
       const win = BrowserWindow.fromWebContents(event.sender);
 
-      const downloadActions = mediaUrls.map((url) => downloadImages(win, url));
+      if (win) {
+        const downloadActions = mediaUrls.map((url) =>
+          downloadImages(win, url)
+        );
 
-      await Promise.all(downloadActions);
+        await Promise.all(downloadActions);
+        const response: DownloadResponse = {
+          status: DownloadActions.SUCESS,
+          message: `Sucess downloading ${mediaUrls.length} files`,
+        };
+
+        console.log(`Donwloaded files: ${mediaUrls.length}`);
+
+        return response;
+      }
       const response: DownloadResponse = {
-        status: DownloadActions.SUCESS,
-        message: `Sucess downloading ${mediaUrls.length} files`,
+        status: DownloadActions.FAIL,
+        message: JSON.stringify(`Browser window is undefined`),
       };
-
-      console.log(`Donwloaded files: ${mediaUrls.length}`);
-
       return response;
     } catch (error) {
       const response: DownloadResponse = {
