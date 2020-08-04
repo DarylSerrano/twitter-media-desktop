@@ -2,5 +2,6 @@
   "HOME": "/",
   "TIMELINE": "/timeline",
   "STATUS": "/status/:id",
-  "LOGIN_SUCCESS": "/loginSucess"
+  "LOGIN_SUCCESS": "/loginSucess",
+  "TIMELINE_TEST": "/testTimeline"
 }

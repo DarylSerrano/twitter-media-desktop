@@ -14,14 +14,14 @@ enum FetchState {
   IDDLE,
 }
 
-type TimelineProps = {
-  user_id: string;
+type TestTimelineProps = {
+  user_id?: string;
   userHome?: boolean;
   screen_name?: string;
   count?: number;
 };
 
-export default function Timeline(props: TimelineProps) {
+export default function TestTimeline(props: TestTimelineProps) {
   const [resposeData, setResposeData] = useState<Tweet[]>([]);
   const [fetchState, setfetchState] = useState<FetchState>(FetchState.IDDLE);
   const [sinceId, setSinceId] = useState<number>(0);
@@ -32,8 +32,7 @@ export default function Timeline(props: TimelineProps) {
 
     const response = await Navigator.getStatus(
       {
-        type: NavigatorType.USER_ID,
-        searchData: props.user_id,
+        type: NavigatorType.LOGED_USER,
       },
       {}
     );
@@ -51,8 +50,7 @@ export default function Timeline(props: TimelineProps) {
 
     const response = await Navigator.getOldStatus(
       {
-        type: NavigatorType.USER_ID,
-        searchData: props.user_id,
+        type: NavigatorType.LOGED_USER,
       },
       { maxId }
     );
@@ -79,8 +77,7 @@ export default function Timeline(props: TimelineProps) {
 
     const response = await Navigator.getNewStatus(
       {
-        type: NavigatorType.USER_ID,
-        searchData: props.user_id,
+        type: NavigatorType.LOGED_USER,
       },
       { sinceId }
     );

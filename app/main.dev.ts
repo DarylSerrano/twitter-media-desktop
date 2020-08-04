@@ -16,6 +16,7 @@ import MenuBuilder from './menu';
 import createServer from './main/proxy/server';
 import { setupListener } from './main/downloader';
 import { CHANNEL_NAME } from './interfaces/Login';
+import TwitterClient from './main/proxy/TwitterClient';
 
 // Create twitter proxy server
 createServer();
@@ -129,6 +130,7 @@ setupListener();
 
 // setupSucessLoginHandler
 ipcMain.handle(CHANNEL_NAME, async () => {
-  // TODO:
+  await TwitterClient.userLogin();
+
   return 'Ok';
 });

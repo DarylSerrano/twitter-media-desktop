@@ -20,6 +20,7 @@ export default function Home(): JSX.Element {
       </Button>
       <Link to={routes.TIMELINE}>To timeline</Link>
       <Link to={routes.LOGIN_SUCCESS}>To Login success</Link>
+      <Link to={routes.TIMELINE_TEST}>To timeline test page</Link>
     </div>
   );
 }

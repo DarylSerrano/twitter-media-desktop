@@ -38,6 +38,29 @@ router.get('/test', async (_req: Request, res: Response) => {
   res.status(200).json({ status: 200, data: 'Good' });
 });
 
+router.get(
+  '/statuses/home_timeline',
+  async (req: Request, res: Response, next: NextFunction) => {
+    const url = req.path.replace(config.API_PATH, '');
+    console.log(
+      `Get request: url: ${url} params: ${JSON.stringify(req.query)}`
+    );
+
+    if (TwitterClient.isAuth() && TwitterClient.isUserAuth()) {
+      try {
+        const data = await TwitterClient.twitterUser?.get(url, req.query);
+        res.send(data || {});
+        return;
+      } catch (err) {
+        errorHandler(err, res, next);
+      }
+    } else {
+      console.log(`Not logged in`);
+      res.status(500).send({ error: 'Not logged in' });
+    }
+  }
+);
+
 router.get('/*', async (req: Request, res: Response, next: NextFunction) => {
   const url = req.path.replace(config.API_PATH, '');
   console.log(`Get request: url: ${url} params: ${JSON.stringify(req.query)}`);

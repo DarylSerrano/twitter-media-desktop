@@ -25,9 +25,10 @@ export interface Fetchable<T, V> {
 export enum NavigatorType {
   SCREEN_NAME,
   USER_ID,
+  LOGED_USER,
 }
 
 export interface TimelineNavigationParams {
   type: NavigatorType;
-  searchData: string;
+  searchData?: string;
 }
