@@ -19,7 +19,7 @@ There is a file where api keys are stored on, `API_KEYS.json` file containing ap
 ```
 
 - On windows, usually the path is: `C:\Users\<YOUR_USERNAME>\AppData\Roaming\Electron\storage`
-- On Linux, the path is: ``
+- On Linux, usually the path is: `$HOME/.config/Electron/storage/`
 
 # Install
 
