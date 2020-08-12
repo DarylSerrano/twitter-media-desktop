@@ -14,8 +14,9 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import createServer from './lib/main/proxy/server';
-import setupDownloaderListener from './lib/main/downloader';
+import downloaderListener from './lib/main/downloader';
 import setUpAuthenticationListener from './ipc/main/authenticationIpc';
+import setupDownloadListener from './ipc/main/downloader';
 import WindowManager from './lib/main/WindowService';
 import MAIN_WINDOW_ID from './interfaces/MainWindow';
 
@@ -129,6 +130,6 @@ app.on('activate', () => {
 });
 
 // Setup donwloader listener
-setupDownloaderListener();
+setupDownloadListener(downloaderListener);
 
 setUpAuthenticationListener();
