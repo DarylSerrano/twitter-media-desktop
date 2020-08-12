@@ -6,7 +6,6 @@ import { ipcRenderer } from 'electron';
 import {
   UnorderedListOutlined,
   HomeOutlined,
-  SearchOutlined,
   LoginOutlined,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
@@ -47,10 +46,7 @@ export default function Sidebar() {
         <Menu.Item key="1" icon={<HomeOutlined />}>
           <Link to={routes.HOME}>Home</Link>
         </Menu.Item>
-        <Menu.Item key="2" icon={<SearchOutlined />}>
-          Seach
-        </Menu.Item>
-        <Menu.Item key="3" icon={<UnorderedListOutlined />}>
+        <Menu.Item key="2" icon={<UnorderedListOutlined />}>
           <Link to={routes.TIMELINE}>Timelines</Link>
         </Menu.Item>
         <Menu.Item onClick={onLogin} key="4" icon={<LoginOutlined />}>

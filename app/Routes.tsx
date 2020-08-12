@@ -6,7 +6,6 @@ import App from './containers/App';
 import HomePage from './containers/HomePage';
 import TimelinePage from './containers/TimelinePage';
 import StatusPage from './containers/StatusPage';
-import LoginSuccessPage from './containers/LoginSuccessPage';
 import TimelineHomePage from './containers/TimelineHomePage';
 
 export default function Routes() {
@@ -16,7 +15,6 @@ export default function Routes() {
         <Route path={routes.TIMELINE} component={TimelinePage} />
         <Route path={routes.STATUS} component={StatusPage} />
         <Route exact path={routes.HOME} component={HomePage} />
-        <Route exact path={routes.LOGIN_SUCCESS} component={LoginSuccessPage} />
         <Route exact path={routes.TIMELINE_TEST} component={TimelineHomePage} />
       </Switch>
     </App>
