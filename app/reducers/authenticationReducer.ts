@@ -28,4 +28,16 @@ const reducer = (state = initialState, acion: ActionType) => {
   }
 };
 
+export const loginUser = (): LoginAction => {
+  return {
+    type: AuthenticationActionType.LOGIN,
+  };
+};
+
+export const logoutUser = (): LogoutAction => {
+  return {
+    type: AuthenticationActionType.LOGOUT,
+  };
+};
+
 export default reducer;
