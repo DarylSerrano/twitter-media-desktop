@@ -3,10 +3,18 @@ enum AuthenticationActionType {
   LOGOUT = 'LOGOUT',
 }
 
-export type AuthenticationState = boolean;
+export type AuthenticationState = {
+  loggedIn: boolean;
+  userName: string;
+  userId: string;
+};
 
 interface LoginAction {
   type: AuthenticationActionType.LOGIN;
+  data: {
+    userName: string;
+    userId: string;
+  };
 }
 
 interface LogoutAction {
@@ -15,22 +23,42 @@ interface LogoutAction {
 
 export type ActionType = LoginAction | LogoutAction;
 
-const initialState: AuthenticationState = false;
+const initialState: AuthenticationState = {
+  loggedIn: false,
+  userId: '',
+  userName: '',
+};
 
-const reducer = (state = initialState, acion: ActionType) => {
-  switch (acion.type) {
-    case AuthenticationActionType.LOGIN:
-      return true;
-    case AuthenticationActionType.LOGOUT:
-      return false;
+const reducer = (state = initialState, action: ActionType) => {
+  switch (action.type) {
+    case AuthenticationActionType.LOGIN: {
+      const newState: AuthenticationState = {
+        loggedIn: true,
+        userId: action.data.userId,
+        userName: action.data.userName,
+      };
+      return newState;
+    }
+    case AuthenticationActionType.LOGOUT: {
+      const newState: AuthenticationState = {
+        loggedIn: false,
+        userId: '',
+        userName: '',
+      };
+      return newState;
+    }
     default:
       return state;
   }
 };
 
-export const loginUser = (): LoginAction => {
+export const loginUser = (userId: string, userName: string): LoginAction => {
   return {
     type: AuthenticationActionType.LOGIN,
+    data: {
+      userId,
+      userName,
+    },
   };
 };
 

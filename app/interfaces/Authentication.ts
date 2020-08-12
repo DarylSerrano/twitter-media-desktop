@@ -5,6 +5,16 @@ export enum AuthenticationActions {
   LOGOUT = 'LOGOUT',
 }
 
-export interface AuthenticationParams {
-  action: AuthenticationActions;
+export interface AuthenticationLoggedInParams {
+  action: AuthenticationActions.LOGIN;
+  userName: string;
+  userId: string;
 }
+
+export interface AuthenticationLogoutParams {
+  action: AuthenticationActions.LOGOUT;
+}
+
+export type AuthenticationParams =
+  | AuthenticationLoggedInParams
+  | AuthenticationLogoutParams;

@@ -1,12 +1,12 @@
 import React, { ReactNode, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import AppLayout from '../components/AppLayout';
-import { AuthenticationActions } from '../interfaces/Authentication';
-import { loginUser, logoutUser } from '../reducers/authenticationReducer';
 import {
-  setupRendererHandler,
-  unsetupRendererHandler,
-} from '../ipc/authenticationIpc';
+  AuthenticationActions,
+  AuthenticationParams,
+} from '../interfaces/Authentication';
+import { loginUser, logoutUser } from '../reducers/authenticationReducer';
+import authenticationIpc from '../ipc/renderer/authenticationIpc';
 
 type Props = {
   children: ReactNode;
@@ -17,10 +17,10 @@ export default function App(props: Props) {
 
   const dispatch = useDispatch();
 
-  const handleAuthentication = (action: AuthenticationActions) => {
-    switch (action) {
+  const handleAuthentication = (params: AuthenticationParams) => {
+    switch (params.action) {
       case AuthenticationActions.LOGIN:
-        dispatch(loginUser());
+        dispatch(loginUser(params.userId, params.userName));
         break;
       case AuthenticationActions.LOGOUT:
         dispatch(logoutUser());
@@ -30,9 +30,9 @@ export default function App(props: Props) {
   };
 
   useEffect(() => {
-    setupRendererHandler(handleAuthentication);
+    authenticationIpc.setupRendererHandler(handleAuthentication);
     return () => {
-      unsetupRendererHandler();
+      authenticationIpc.unsetupRendererHandler();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

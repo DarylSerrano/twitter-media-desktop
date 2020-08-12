@@ -3,10 +3,14 @@
 /* eslint-disable @typescript-eslint/no-useless-constructor */
 import Twitter from 'twitter-lite';
 import Storage from 'electron-json-storage';
-import { dialog, app, BrowserWindow } from 'electron';
+import { dialog, app } from 'electron';
 import { promisify } from 'util';
 import config from './ProxyConfig';
-import { ClientAuthInformation } from '../../../interfaces/Login';
+import {
+  ClientAuthInformation,
+  LOGIN_WINDOW_ID,
+} from '../../../interfaces/Login';
+import WindowManager from '../WindowService';
 
 const storageHas = promisify<string, boolean>(Storage.has);
 const storageGet = promisify(Storage.get);
@@ -78,11 +82,10 @@ class Client {
         throw new Error('oauth_callback_confirmed=false');
       }
 
-      const window = new BrowserWindow();
-      window.loadURL(
-        // @ts-ignore
-        `https://api.twitter.com/oauth/authenticate?oauth_token=${getRequestTokenRes.oauth_token}`
-      );
+      // @ts-ignore
+      const loadUrl = `https://api.twitter.com/oauth/authenticate?oauth_token=${getRequestTokenRes.oauth_token}`;
+
+      WindowManager.createWindow(LOGIN_WINDOW_ID, loadUrl);
     }
   }
 

@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Response, Request, Router, NextFunction } from 'express';
 import TwitterClient from './TwitterClient';
+import { LOGIN_WINDOW_ID } from '../../../interfaces/Login';
+import WindowManager from '../WindowService';
+import { notifyLoggedIn } from '../../../ipc/main/authenticationIpc';
 
 type AuthorizationQuery = {
   oauth_token: string;
@@ -39,6 +42,13 @@ router.get(
         accTkn: accesTokenResponse.oauth_token,
         accTknSecret: accesTokenResponse.oauth_token_secret,
       });
+
+      notifyLoggedIn({
+        userId: accesTokenResponse.user_id,
+        userName: accesTokenResponse.screen_name,
+      });
+
+      WindowManager.closeWindow(LOGIN_WINDOW_ID);
 
       return res.status(200).send({ status: 200, data: 'Good' });
     }

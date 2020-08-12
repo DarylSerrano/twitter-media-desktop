@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 import { Layout, Menu } from 'antd';
 import { ipcRenderer } from 'electron';
@@ -12,14 +13,19 @@ import { Link } from 'react-router-dom';
 
 import routes from '../../constants/routes.json';
 import styles from './sidebar.css';
-import { CHANNEL_NAME } from '../../interfaces/Login';
+import { LOGIN_CHANNEL_NAME } from '../../interfaces/Login';
+import { RootState } from '../../store';
 
 const { Sider } = Layout;
 
 export default function Sidebar() {
   const onLogin = async () => {
-    await ipcRenderer.invoke(CHANNEL_NAME);
+    await ipcRenderer.invoke(LOGIN_CHANNEL_NAME);
   };
+
+  const { loggedIn, userId, userName } = useSelector(
+    (state: RootState) => state.authetication
+  );
 
   return (
     <Sider
@@ -32,7 +38,11 @@ export default function Sidebar() {
         left: 0,
       }}
     >
-      <div className={styles.logo} />
+      <div className={loggedIn ? styles.logo : styles.logoLoggedIn}>
+        {loggedIn
+          ? `Logged as: ${userName} with id: ${userId}`
+          : `Not logged in`}
+      </div>
       <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
         <Menu.Item key="1" icon={<HomeOutlined />}>
           <Link to={routes.HOME}>Home</Link>

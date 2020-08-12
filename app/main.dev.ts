@@ -9,14 +9,15 @@
  * `./app/main.prod.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import createServer from './lib/main/proxy/server';
-import { setupListener } from './lib/main/downloader';
-import { CHANNEL_NAME } from './interfaces/Login';
-import TwitterClient from './lib/main/proxy/TwitterClient';
+import setupDownloaderListener from './lib/main/downloader';
+import setUpAuthenticationListener from './ipc/main/authenticationIpc';
+import WindowManager from './lib/main/WindowService';
+import MAIN_WINDOW_ID from './interfaces/MainWindow';
 
 // Create twitter proxy server
 createServer();
@@ -91,6 +92,8 @@ const createWindow = async () => {
       mainWindow.show();
       mainWindow.focus();
     }
+
+    WindowManager.addWindow(MAIN_WINDOW_ID, mainWindow);
   });
 
   mainWindow.on('closed', () => {
@@ -126,11 +129,6 @@ app.on('activate', () => {
 });
 
 // Setup donwloader listener
-setupListener();
+setupDownloaderListener();
 
-// setupSucessLoginHandler
-ipcMain.handle(CHANNEL_NAME, async () => {
-  await TwitterClient.userLogin();
-
-  return 'Ok';
-});
+setUpAuthenticationListener();

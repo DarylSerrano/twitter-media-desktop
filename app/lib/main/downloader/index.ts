@@ -14,7 +14,7 @@ function downloadImages(win: BrowserWindow, url: string) {
 }
 
 // eslint-disable-next-line import/prefer-default-export
-export function setupListener() {
+export default function setupListener() {
   ipcMain.handle(CHANNEL_NAME, async (event, { mediaUrls }: DownloadParams) => {
     try {
       const win = BrowserWindow.fromWebContents(event.sender);
