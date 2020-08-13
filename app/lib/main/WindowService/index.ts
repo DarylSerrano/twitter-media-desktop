@@ -1,4 +1,14 @@
-import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
+import {
+  BrowserWindow,
+  BrowserWindowConstructorOptions,
+  LoadURLOptions,
+} from 'electron';
+
+type CreateWindowParams = {
+  windowConstructorOptions?: BrowserWindowConstructorOptions;
+  loadUrlOptions?: LoadURLOptions;
+  clearStorageData?: boolean;
+};
 
 class WindowManager {
   private windows: Map<string, BrowserWindow>;
@@ -15,13 +25,17 @@ class WindowManager {
     }
   }
 
-  public createWindow(
+  public async createWindow(
     id: string,
     loadUrl: string,
-    options?: BrowserWindowConstructorOptions
+    params?: CreateWindowParams
   ) {
-    const window = new BrowserWindow(options);
-    window.loadURL(loadUrl);
+    const window = new BrowserWindow(params?.windowConstructorOptions);
+    window.loadURL(loadUrl, params?.loadUrlOptions);
+
+    if (params?.clearStorageData)
+      await window.webContents.session.clearStorageData();
+
     window.on('close', () => {
       this.windows.delete(id);
     });

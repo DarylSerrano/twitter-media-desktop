@@ -85,7 +85,10 @@ class Client {
       // @ts-ignore
       const loadUrl = `https://api.twitter.com/oauth/authenticate?oauth_token=${getRequestTokenRes.oauth_token}`;
 
-      WindowManager.createWindow(LOGIN_WINDOW_ID, loadUrl);
+      await WindowManager.createWindow(LOGIN_WINDOW_ID, loadUrl, {
+        windowConstructorOptions: { title: 'Login Twitter' },
+        clearStorageData: true,
+      });
     }
   }
 
