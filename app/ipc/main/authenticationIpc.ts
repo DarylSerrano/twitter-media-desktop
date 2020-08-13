@@ -5,6 +5,7 @@ import {
   AUTHENTICATION_CHANNEL_NAME,
   AuthenticationLoggedInParams,
   AuthenticationActions,
+  AuthenticationParams,
 } from '../../interfaces/Authentication';
 import MAIN_WINDOW_ID from '../../interfaces/MainWindow';
 import WindowManager from '../../lib/main/WindowService';
@@ -14,8 +15,17 @@ const setupListener = () => {
   ipcMain.handle(LOGIN_CHANNEL_NAME, async () => {
     await TwitterClient.userLogin();
 
-    return 'Ok';
+    return 0;
   });
+
+  ipcMain.handle(
+    AUTHENTICATION_CHANNEL_NAME,
+    async (event, params: AuthenticationParams) => {
+      if (params.action === AuthenticationActions.LOGOUT)
+        TwitterClient.userLogout();
+      return 0;
+    }
+  );
 };
 
 type NotifyLoggedInParams = { userId: string; userName: string };

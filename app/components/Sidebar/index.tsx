@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { Layout, Menu } from 'antd';
 import { ipcRenderer } from 'electron';
@@ -7,6 +7,7 @@ import {
   UnorderedListOutlined,
   HomeOutlined,
   LoginOutlined,
+  LogoutOutlined,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
@@ -15,16 +16,24 @@ import styles from './sidebar.css';
 import { LOGIN_CHANNEL_NAME } from '../../interfaces/Login';
 import { RootState } from '../../store';
 
+import { logoutUser } from '../../reducers/authenticationReducer';
+
 const { Sider } = Layout;
 
 export default function Sidebar() {
-  const onLogin = async () => {
-    await ipcRenderer.invoke(LOGIN_CHANNEL_NAME);
-  };
+  const dispatch = useDispatch();
 
   const { loggedIn, userId, userName } = useSelector(
     (state: RootState) => state.authetication
   );
+
+  const onLoginLogout = async () => {
+    if (loggedIn) {
+      dispatch(logoutUser());
+    } else {
+      await ipcRenderer.invoke(LOGIN_CHANNEL_NAME);
+    }
+  };
 
   return (
     <Sider
@@ -38,9 +47,7 @@ export default function Sidebar() {
       }}
     >
       <div className={loggedIn ? styles.logo : styles.logoLoggedIn}>
-        {loggedIn
-          ? `Logged as: ${userName} with id: ${userId}`
-          : `Not logged in`}
+        {loggedIn ? `Logged as: ${userName} with id: ${userId}` : null}
       </div>
       <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
         <Menu.Item key="1" icon={<HomeOutlined />}>
@@ -49,8 +56,12 @@ export default function Sidebar() {
         <Menu.Item key="2" icon={<UnorderedListOutlined />}>
           <Link to={routes.TIMELINE}>Timelines</Link>
         </Menu.Item>
-        <Menu.Item onClick={onLogin} key="4" icon={<LoginOutlined />}>
-          Login
+        <Menu.Item
+          onClick={onLoginLogout}
+          key="4"
+          icon={loggedIn ? <LogoutOutlined /> : <LoginOutlined />}
+        >
+          {loggedIn ? `Logout` : `Login`}
         </Menu.Item>
       </Menu>
     </Sider>

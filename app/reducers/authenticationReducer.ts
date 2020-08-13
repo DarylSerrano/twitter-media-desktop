@@ -1,3 +1,12 @@
+import { ipcRenderer } from 'electron';
+import { ThunkAction } from 'redux-thunk';
+import { AnyAction } from 'redux';
+import {
+  AuthenticationActions,
+  AuthenticationLogoutParams,
+  AUTHENTICATION_CHANNEL_NAME,
+} from '../interfaces/Authentication';
+
 enum AuthenticationActionType {
   LOGIN = 'LOGIN',
   LOGOUT = 'LOGOUT',
@@ -22,6 +31,8 @@ interface LogoutAction {
 }
 
 export type ActionType = LoginAction | LogoutAction;
+
+type RootState = { authetication: AuthenticationState };
 
 const initialState: AuthenticationState = {
   loggedIn: false,
@@ -62,10 +73,25 @@ export const loginUser = (userId: string, userName: string): LoginAction => {
   };
 };
 
-export const logoutUser = (): LogoutAction => {
-  return {
+export const logoutUser = (): ThunkAction<
+  Promise<void>,
+  RootState,
+  unknown,
+  AnyAction
+> => async (dispatch, getState) => {
+  const { authetication } = getState();
+
+  if (authetication.loggedIn) {
+    const params: AuthenticationLogoutParams = {
+      action: AuthenticationActions.LOGOUT,
+    };
+
+    await ipcRenderer.invoke(AUTHENTICATION_CHANNEL_NAME, params);
+  }
+
+  dispatch({
     type: AuthenticationActionType.LOGOUT,
-  };
+  });
 };
 
 export default reducer;

@@ -102,6 +102,10 @@ class Client {
     }
   }
 
+  userLogout() {
+    this.twitterUser = undefined;
+  }
+
   async isUserCredentialsCorrect() {
     try {
       if (this.twitterUser) {
