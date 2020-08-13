@@ -20,7 +20,7 @@ const setupListener = () => {
 
   ipcMain.handle(
     AUTHENTICATION_CHANNEL_NAME,
-    async (event, params: AuthenticationParams) => {
+    async (_event, params: AuthenticationParams) => {
       if (params.action === AuthenticationActions.LOGOUT)
         TwitterClient.userLogout();
       return 0;

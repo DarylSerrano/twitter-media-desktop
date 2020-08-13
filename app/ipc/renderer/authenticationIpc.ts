@@ -9,7 +9,7 @@ const setupRendererHandler = (
 ) => {
   ipcRenderer.on(
     AUTHENTICATION_CHANNEL_NAME,
-    async (event, params: AuthenticationParams) => {
+    async (_event, params: AuthenticationParams) => {
       handler(params);
     }
   );
