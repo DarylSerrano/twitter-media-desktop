@@ -3,7 +3,10 @@ import { Spin, Space, List, Button } from 'antd';
 import { RedoOutlined } from '@ant-design/icons';
 import TweetMini from '../Tweet/Tweet-mini';
 import { Tweet } from '../../interfaces/Tweet';
-import { NavigatorType } from '../../interfaces/Timelines';
+import {
+  NavigatorType,
+  TimelineNavigationParams,
+} from '../../interfaces/Timelines';
 import { filterMediaOnly } from '../../lib/renderer/TweetFiltering';
 import * as Navigator from '../../lib/renderer/TimelineNavigator';
 
@@ -15,28 +18,29 @@ enum FetchState {
 }
 
 type TimelineProps = {
-  user_id: string;
+  user_id?: string;
   userHome?: boolean;
-  screen_name?: string;
   count?: number;
 };
 
-export default function Timeline(props: TimelineProps) {
+export default function Timeline({
+  user_id,
+  count = 5,
+  userHome = false,
+}: TimelineProps) {
   const [resposeData, setResposeData] = useState<Tweet[]>([]);
   const [fetchState, setfetchState] = useState<FetchState>(FetchState.IDDLE);
   const [sinceId, setSinceId] = useState<number>(0);
   const [maxId, setMaxId] = useState<number>(0);
 
+  const timelineNavigationParanms: TimelineNavigationParams = userHome
+    ? { type: NavigatorType.LOGED_USER }
+    : { type: NavigatorType.USER_ID, searchData: user_id };
+
   const fetchTimeline = async () => {
     setfetchState(FetchState.FETCHING);
 
-    const response = await Navigator.getStatus(
-      {
-        type: NavigatorType.USER_ID,
-        searchData: props.user_id,
-      },
-      {}
-    );
+    const response = await Navigator.getStatus(timelineNavigationParanms, {});
 
     console.log(JSON.stringify(response.data));
 
@@ -49,13 +53,9 @@ export default function Timeline(props: TimelineProps) {
   const onGetMoreStatus = async () => {
     setfetchState(FetchState.FETCHING);
 
-    const response = await Navigator.getOldStatus(
-      {
-        type: NavigatorType.USER_ID,
-        searchData: props.user_id,
-      },
-      { maxId }
-    );
+    const response = await Navigator.getOldStatus(timelineNavigationParanms, {
+      maxId,
+    });
 
     setResposeData((previousData) => {
       const oldStatus: Tweet[] = JSON.parse(JSON.stringify(previousData));
@@ -77,13 +77,9 @@ export default function Timeline(props: TimelineProps) {
   const onUpdateStatus = async () => {
     setfetchState(FetchState.FETCHING);
 
-    const response = await Navigator.getNewStatus(
-      {
-        type: NavigatorType.USER_ID,
-        searchData: props.user_id,
-      },
-      { sinceId }
-    );
+    const response = await Navigator.getNewStatus(timelineNavigationParanms, {
+      sinceId,
+    });
 
     setResposeData((previousData) => {
       const newData: Tweet[] = JSON.parse(JSON.stringify(previousData));
@@ -97,6 +93,7 @@ export default function Timeline(props: TimelineProps) {
 
   useEffect(() => {
     fetchTimeline();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadMore = (

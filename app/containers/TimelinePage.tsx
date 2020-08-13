@@ -1,12 +1,16 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import React from 'react';
-import { Tabs } from 'antd';
+import { Tabs, Result } from 'antd';
 import { HomeFilled, SearchOutlined } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
 import Timeline from '../components/Timeline';
+import { RootState } from '../store';
 
 const { TabPane } = Tabs;
 
 export default function TimelinePage() {
+  const { loggedIn } = useSelector((state: RootState) => state.authetication);
+
   return (
     <Tabs centered defaultActiveKey="Search" type="card">
       <TabPane
@@ -29,7 +33,15 @@ export default function TimelinePage() {
         }
         key="Home"
       >
-        <Timeline count={5} user_id="2151128746" />
+        {loggedIn ? (
+          <Timeline count={5} userHome />
+        ) : (
+          <Result
+            status="warning"
+            title="Not logged in"
+            subTitle="Please log in in order to get Home timeline"
+          />
+        )}
       </TabPane>
     </Tabs>
   );
