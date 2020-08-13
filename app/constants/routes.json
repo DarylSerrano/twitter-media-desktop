@@ -1,6 +1,5 @@
 {
   "HOME": "/",
   "TIMELINE": "/timeline",
-  "STATUS": "/status/:id",
-  "TIMELINE_TEST": "/testTimeline"
+  "STATUS": "/status/:id"
 }
