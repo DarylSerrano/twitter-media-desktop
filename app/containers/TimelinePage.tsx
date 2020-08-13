@@ -4,6 +4,7 @@ import { Tabs, Result } from 'antd';
 import { HomeFilled, SearchOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import Timeline from '../components/Timeline';
+import TimelineTab from '../components/TimelineTab';
 import { RootState } from '../store';
 
 const { TabPane } = Tabs;
@@ -22,7 +23,7 @@ export default function TimelinePage() {
         }
         key="Search"
       >
-        Search Here
+        <TimelineTab />
       </TabPane>
       <TabPane
         tab={
