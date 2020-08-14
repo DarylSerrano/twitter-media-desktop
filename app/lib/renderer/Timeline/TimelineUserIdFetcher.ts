@@ -2,19 +2,19 @@ import {
   FetchResult,
   FetchOptions,
   Fetchable,
-} from '../../interfaces/Timelines';
-import { getMaxId, getSinceId, makefetchTimeline } from './TimelineFetch';
+} from '../../../interfaces/Timelines';
+import { getMaxId, getSinceId, makefetchTimeline } from './Fetch';
 
-export default class TimelineScreenNameFetcher
+export default class TimelineUserIdFetcher
   implements Fetchable<FetchOptions, FetchResult> {
-  constructor(private readonly screenName: string) {}
+  constructor(private readonly userId: string) {}
 
   async fetch(options: FetchOptions) {
     const url = new URL('http://127.0.0.1:4200/api/statuses/user_timeline');
 
     const { count = 5, maxId, sinceId } = options;
 
-    url.searchParams.append('screen_name', this.screenName);
+    url.searchParams.append('id', this.userId);
     url.searchParams.append('count', count.toString());
     if (maxId) url.searchParams.append('max_id', maxId.toString());
     if (sinceId) url.searchParams.append('since_id', sinceId.toString());

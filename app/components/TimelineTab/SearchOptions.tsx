@@ -1,34 +1,16 @@
 import React from 'react';
-import { Form, Input, Button, Select } from 'antd';
+import { Form, Input, Button, Radio } from 'antd';
 
-const { Option } = Select;
-
-interface FormValues {
-  note: string;
-  gener: string;
-}
+type FormValues = {
+  searchData: string;
+  searchType: string;
+};
 
 export default function SearchOptions() {
   const [form] = Form.useForm();
 
-  const onGenderChange = (value: string) => {
-    switch (value) {
-      case 'male':
-        form.setFieldsValue({ note: 'Hi, man!' });
-        break;
-      case 'female':
-        form.setFieldsValue({ note: 'Hi, lady!' });
-        break;
-      case 'other':
-        form.setFieldsValue({ note: 'Hi there!' });
-        break;
-      default:
-        break;
-    }
-  };
-
   const onFinish = (values) => {
-    const l = values as FormValues;
+    const l = values;
     console.log(l);
   };
 
@@ -36,56 +18,33 @@ export default function SearchOptions() {
     form.resetFields();
   };
 
-  const onFill = () => {
-    form.setFieldsValue({
-      note: 'Hello world!',
-      gender: 'male',
-    });
+  const initialValues: FormValues = {
+    searchData: '',
+    searchType: 'any',
   };
 
   return (
-    <Form form={form} name="control-hooks" onFinish={onFinish}>
-      <Form.Item name="note" label="Note" rules={[{ required: true }]}>
+    <Form form={form} onFinish={onFinish} initialValues={initialValues}>
+      <Form.Item name="searchData" label="Search" rules={[{ required: true }]}>
         <Input />
       </Form.Item>
-      <Form.Item name="gender" label="Gender" rules={[{ required: true }]}>
-        <Select
-          placeholder="Select a option and change input text above"
-          onChange={onGenderChange}
-          allowClear
-        >
-          <Option value="male">male</Option>
-          <Option value="female">female</Option>
-          <Option value="other">other</Option>
-        </Select>
-      </Form.Item>
       <Form.Item
-        noStyle
-        shouldUpdate={(prevValues, currentValues) => {
-          return prevValues.gender !== currentValues.gender;
-        }}
+        name="searchType"
+        label="Search by"
+        rules={[{ required: true }]}
       >
-        {({ getFieldValue }) => {
-          return getFieldValue('gender') === 'other' ? (
-            <Form.Item
-              name="customizeGender"
-              label="Customize Gender"
-              rules={[{ required: true }]}
-            >
-              <Input />
-            </Form.Item>
-          ) : null;
-        }}
+        <Radio.Group defaultValue="any">
+          <Radio value="any">Any</Radio>
+          <Radio value="userId">User id</Radio>
+          <Radio value="screenName">Screen name</Radio>
+        </Radio.Group>
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
-          Submit
+          Search
         </Button>
         <Button htmlType="button" onClick={onReset}>
           Reset
-        </Button>
-        <Button type="link" htmlType="button" onClick={onFill}>
-          Fill form
         </Button>
       </Form.Item>
     </Form>

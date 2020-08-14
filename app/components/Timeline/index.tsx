@@ -8,7 +8,7 @@ import {
   TimelineNavigationParams,
 } from '../../interfaces/Timelines';
 import { filterMediaOnly } from '../../lib/renderer/TweetFiltering';
-import * as Navigator from '../../lib/renderer/TimelineNavigator';
+import * as Navigator from '../../lib/renderer/Timeline/TimelineNavigator';
 
 enum FetchState {
   FETCHING,

@@ -3,8 +3,8 @@ import {
   FetchResult,
   FetchOptions,
   Fetchable,
-} from '../../interfaces/Timelines';
-import { getMaxId, getSinceId, makefetchTimeline } from './TimelineFetch';
+} from '../../../interfaces/Timelines';
+import { getMaxId, getSinceId, makefetchTimeline } from './Fetch';
 
 export default class TimelineLoggedUser
   implements Fetchable<FetchOptions, FetchResult> {

@@ -2,8 +2,8 @@ import {
   FetchOptions,
   FetchResult,
   TimelineNavigationParams,
-} from '../../interfaces/Timelines';
-import TimelineFetcherFactory from './TimelineFetcherFactory';
+} from '../../../interfaces/Timelines';
+import TimelineFetcherFactory from './FetcherFactory';
 
 type GetNewStatusParams = {
   count?: number;

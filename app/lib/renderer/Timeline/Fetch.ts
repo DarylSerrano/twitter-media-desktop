@@ -1,5 +1,5 @@
 import fetch from 'cross-fetch';
-import { Tweet } from '../../interfaces/Tweet';
+import { Tweet } from '../../../interfaces/Tweet';
 
 export async function makefetchTimeline(url: string) {
   const response = await fetch(url);
