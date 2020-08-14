@@ -21,9 +21,8 @@ function errorHandler(err: Error, res: Response, next: NextFunction) {
       res.status(500).send({ message: twitterApiError.message });
     } else {
       // some other kind of error, e.g. read-only API trying to POST
-      res
-        .status(twitterApiError.errors[0].code)
-        .send({ message: twitterApiError.message });
+      console.log(`Other error: ${JSON.stringify(err)}`);
+      res.status(500).send({ message: twitterApiError.message });
     }
   } else {
     // non-API error, e.g. network problem or invalid JSON in response
@@ -32,30 +31,34 @@ function errorHandler(err: Error, res: Response, next: NextFunction) {
   }
 }
 
+const authGetHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const url = req.path.replace(config.API_PATH, '');
+  console.log(
+    `User Auth Get request: url: ${url} params: ${JSON.stringify(req.query)}`
+  );
+
+  if (TwitterClient.isAuth() && TwitterClient.isUserAuth()) {
+    try {
+      const data = await TwitterClient.twitterUser?.get(url, req.query);
+      res.send(data || {});
+      return;
+    } catch (err) {
+      errorHandler(err, res, next);
+    }
+  } else {
+    console.log(`Not logged in`);
+    res.status(500).send({ error: 'Not logged in' });
+  }
+};
+
 const router = Router();
 
-router.get(
-  '/statuses/home_timeline',
-  async (req: Request, res: Response, next: NextFunction) => {
-    const url = req.path.replace(config.API_PATH, '');
-    console.log(
-      `Get request: url: ${url} params: ${JSON.stringify(req.query)}`
-    );
-
-    if (TwitterClient.isAuth() && TwitterClient.isUserAuth()) {
-      try {
-        const data = await TwitterClient.twitterUser?.get(url, req.query);
-        res.send(data || {});
-        return;
-      } catch (err) {
-        errorHandler(err, res, next);
-      }
-    } else {
-      console.log(`Not logged in`);
-      res.status(500).send({ error: 'Not logged in' });
-    }
-  }
-);
+router.get('/statuses/home_timeline', authGetHandler);
+router.get('users/search', authGetHandler);
 
 router.get('/*', async (req: Request, res: Response, next: NextFunction) => {
   const url = req.path.replace(config.API_PATH, '');

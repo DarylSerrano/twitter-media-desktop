@@ -1,17 +1,26 @@
 import React from 'react';
 import { Form, Input, Button, Radio } from 'antd';
+import { useSelector } from 'react-redux';
+
+import { RootState } from '../../store';
 
 type FormValues = {
   searchData: string;
-  searchType: string;
+  searchType: 'userId' | 'screenName' | 'any';
 };
 
-export default function SearchOptions() {
+type SearchOptionsProps = {
+  onSubmit: (values: FormValues) => void;
+};
+
+export default function SearchOptions({ onSubmit }: SearchOptionsProps) {
+  const { loggedIn } = useSelector((state: RootState) => state.authetication);
   const [form] = Form.useForm();
 
   const onFinish = (values) => {
     const l = values;
     console.log(l);
+    onSubmit(values);
   };
 
   const onReset = () => {
@@ -20,7 +29,7 @@ export default function SearchOptions() {
 
   const initialValues: FormValues = {
     searchData: '',
-    searchType: 'any',
+    searchType: 'userId',
   };
 
   return (
@@ -33,8 +42,10 @@ export default function SearchOptions() {
         label="Search by"
         rules={[{ required: true }]}
       >
-        <Radio.Group defaultValue="any">
-          <Radio value="any">Any</Radio>
+        <Radio.Group>
+          <Radio value="any" disabled={!loggedIn}>
+            Any
+          </Radio>
           <Radio value="userId">User id</Radio>
           <Radio value="screenName">Screen name</Radio>
         </Radio.Group>

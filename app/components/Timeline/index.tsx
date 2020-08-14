@@ -40,7 +40,9 @@ export default function Timeline({
   const fetchTimeline = async () => {
     setfetchState(FetchState.FETCHING);
 
-    const response = await Navigator.getStatus(timelineNavigationParanms, {});
+    const response = await Navigator.getStatus(timelineNavigationParanms, {
+      count,
+    });
 
     console.log(JSON.stringify(response.data));
 
@@ -55,6 +57,7 @@ export default function Timeline({
 
     const response = await Navigator.getOldStatus(timelineNavigationParanms, {
       maxId,
+      count,
     });
 
     setResposeData((previousData) => {
@@ -79,6 +82,7 @@ export default function Timeline({
 
     const response = await Navigator.getNewStatus(timelineNavigationParanms, {
       sinceId,
+      count,
     });
 
     setResposeData((previousData) => {
