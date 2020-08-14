@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Collapse, Alert } from 'antd';
+import Timeline from '../Timeline';
 import SearchOptions from './SearchOptions';
 import searchService from '../../lib/renderer/Search';
 import { User } from '../../interfaces/User';
@@ -57,10 +58,12 @@ export default function TimelineTab() {
         default:
           break;
       }
+      setHasError(false);
+      setErrorMsg('');
     } catch (error) {
       console.log('Error');
       setHasError(true);
-      setErrorMsg(JSON.stringify(error));
+      setErrorMsg(error.message);
     }
   };
 
@@ -77,6 +80,7 @@ export default function TimelineTab() {
     <>
       {hasError ? (
         <Alert
+          showIcon
           type="error"
           message={errorMsg}
           closable
@@ -88,8 +92,9 @@ export default function TimelineTab() {
           <SearchOptions onSubmit={onSearchSubmit} />
         </Panel>
         <Panel header="Timeline" key="2">
-          <p>Timeline here</p>
-          <p>{JSON.stringify(userSelected)}</p>
+          {hasError && userSelected ? null : (
+            <Timeline user_id={userSelected?.id_str} />
+          )}
         </Panel>
       </Collapse>
     </>

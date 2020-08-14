@@ -5,6 +5,11 @@ const BASE_URL = `http://127.0.0.1:4200/api/users`;
 
 async function makeFetch<T>(url: string) {
   const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error(`Error fetching: ${url} status: ${response.statusText}`);
+  }
+
   const body: T = await response.json();
 
   return body;
