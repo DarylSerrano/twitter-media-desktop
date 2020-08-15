@@ -3,6 +3,7 @@ import { Collapse, Alert } from 'antd';
 import Timeline from '../Timeline';
 import SearchOptions from './SearchOptions';
 import searchService from '../../lib/renderer/Search';
+import SelectorUser from './SelectorUser';
 import { User } from '../../interfaces/User';
 
 const { Panel } = Collapse;
@@ -27,12 +28,26 @@ export default function TimelineTab() {
 
   const [userSelected, setUserSelected] = useState<User | undefined>(undefined);
 
+  const [usersGetted, setUsersGetted] = useState<User[]>([]);
+
+  const [selectUserExpanded, setSelectUserExpanded] = useState('');
+
   const [errorMsg, setErrorMsg] = useState<string>('');
   const [hasError, setHasError] = useState(false);
 
   const onSearchSubmit = (values: FormValues) => {
     setSeach(values);
     console.log(values);
+  };
+
+  const expandSelectUser = (isExpanded: boolean) => {
+    setSelectUserExpanded(isExpanded ? 'userSelect' : '');
+  };
+
+  const onSelectUser = (user: User) => {
+    setUserSelected(user);
+    console.log(`Selected user: ${user}`);
+    expandSelectUser(false);
   };
 
   const getUserInformation = async () => {
@@ -53,6 +68,9 @@ export default function TimelineTab() {
           break;
         }
         case 'any': {
+          const users = await searchService.searchAnyuser(search.searchData);
+          setUsersGetted(users);
+          expandSelectUser(true);
           break;
         }
         default:
@@ -90,9 +108,14 @@ export default function TimelineTab() {
       <Collapse defaultActiveKey={['1']}>
         <Panel header="Search options" key="1">
           <SearchOptions onSubmit={onSearchSubmit} />
+          <Collapse activeKey={selectUserExpanded}>
+            <Panel header="Select user" key="userSelect">
+              <SelectorUser users={usersGetted} onSelect={onSelectUser} />
+            </Panel>
+          </Collapse>
         </Panel>
         <Panel header="Timeline" key="2">
-          {hasError && userSelected ? null : (
+          {hasError || !userSelected ? null : (
             <Timeline user_id={userSelected?.id_str} />
           )}
         </Panel>

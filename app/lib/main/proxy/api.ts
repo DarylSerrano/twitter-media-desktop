@@ -58,7 +58,7 @@ const authGetHandler = async (
 const router = Router();
 
 router.get('/statuses/home_timeline', authGetHandler);
-router.get('users/search', authGetHandler);
+router.get('/users/search', authGetHandler);
 
 router.get('/*', async (req: Request, res: Response, next: NextFunction) => {
   const url = req.path.replace(config.API_PATH, '');
