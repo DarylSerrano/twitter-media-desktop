@@ -29,7 +29,7 @@ export default function SearchOptions({ onSubmit }: SearchOptionsProps) {
 
   const initialValues: FormValues = {
     searchData: '',
-    searchType: 'userId',
+    searchType: 'screenName',
   };
 
   return (

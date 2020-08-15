@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Button, Card, notification } from 'antd';
+import { Button, Card, notification, Descriptions } from 'antd';
 import ImageGallery from 'react-image-gallery';
-import {
-  ShareAltOutlined,
-  DownloadOutlined,
-  CopyOutlined,
-} from '@ant-design/icons';
+import { ShareAltOutlined, DownloadOutlined } from '@ant-design/icons';
+
+import { FaRetweet } from 'react-icons/fa';
+import { FcLike } from 'react-icons/fc';
+
 import { ipcRenderer, clipboard } from 'electron';
 import ResponsivePlayer from '../ResponsivePlayer';
 
@@ -76,6 +76,10 @@ export default function Status({ content }: TweetProps) {
     }
   };
 
+  const onLike = () => {};
+
+  const onRetweet = () => {};
+
   return (
     <>
       <ShareModal
@@ -83,34 +87,35 @@ export default function Status({ content }: TweetProps) {
         onOk={() => setModalVisible(false)}
         onCancel={() => setModalVisible(false)}
         visible={modalVisible}
+        onCopy={onCopy}
       />
       <Card
-        title={content.id_str}
+        title="Tweet"
         actions={[
           <Button
             key="Reply"
             shape="round"
             onClick={() => onDownload()}
             icon={<DownloadOutlined />}
-          >
-            Download
-          </Button>,
+          />,
+          <Button
+            key="Like"
+            onClick={onLike}
+            shape="round"
+            icon={<FcLike />}
+          />,
+          <Button
+            key="Retweet"
+            onClick={onRetweet}
+            shape="round"
+            icon={<FaRetweet />}
+          />,
           <Button
             key="Share"
             shape="round"
             onClick={() => setModalVisible(true)}
             icon={<ShareAltOutlined />}
-          >
-            Share
-          </Button>,
-          <Button
-            key="Copy"
-            onClick={onCopy}
-            shape="round"
-            icon={<CopyOutlined />}
-          >
-            Copy
-          </Button>,
+          />,
         ]}
       >
         {hasVideo(content) ? (
@@ -118,6 +123,11 @@ export default function Status({ content }: TweetProps) {
         ) : (
           <ImageGallery items={getGalleryData(content)} />
         )}
+        <Descriptions layout="vertical" column={1}>
+          <Descriptions.Item style={{ textAlign: 'justify' }}>
+            {content.text}
+          </Descriptions.Item>
+        </Descriptions>
       </Card>
     </>
   );

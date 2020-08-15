@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Collapse, Alert } from 'antd';
+import { Collapse, Alert, Skeleton } from 'antd';
 import Timeline from '../Timeline';
 import SearchOptions from './SearchOptions';
 import searchService from '../../lib/renderer/Search';
@@ -23,11 +23,12 @@ type FormValues = {
 export default function TimelineTab() {
   const [search, setSeach] = useState<SearchParams>({
     searchData: '',
-    searchType: 'userId',
+    searchType: 'screenName',
   });
 
-  const [userSelected, setUserSelected] = useState<User | undefined>(undefined);
+  const [didMount, setDidMount] = useState(false);
 
+  const [userSelected, setUserSelected] = useState<User | undefined>(undefined);
   const [usersGetted, setUsersGetted] = useState<User[]>([]);
 
   const [selectUserExpanded, setSelectUserExpanded] = useState('');
@@ -90,9 +91,15 @@ export default function TimelineTab() {
       await getUserInformation();
     }
 
-    fetchUserData();
+    if (didMount) {
+      fetchUserData();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
+
+  useEffect(() => {
+    setDidMount(true);
+  }, []);
 
   return (
     <>
@@ -105,7 +112,7 @@ export default function TimelineTab() {
           afterClose={() => setHasError(false)}
         />
       ) : null}
-      <Collapse defaultActiveKey={['1']}>
+      <Collapse defaultActiveKey={['1', '2']}>
         <Panel header="Search options" key="1">
           <SearchOptions onSubmit={onSearchSubmit} />
           <Collapse activeKey={selectUserExpanded}>
@@ -115,7 +122,9 @@ export default function TimelineTab() {
           </Collapse>
         </Panel>
         <Panel header="Timeline" key="2">
-          {hasError || !userSelected ? null : (
+          {hasError || !userSelected ? (
+            <Skeleton active />
+          ) : (
             <Timeline user_id={userSelected?.id_str} />
           )}
         </Panel>

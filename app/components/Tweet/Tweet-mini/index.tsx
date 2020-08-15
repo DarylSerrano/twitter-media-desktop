@@ -3,11 +3,10 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React from 'react';
 import { Card, Avatar, Button } from 'antd';
-import {
-  HeartOutlined,
-  CommentOutlined,
-  ShareAltOutlined,
-} from '@ant-design/icons';
+import { ShareAltOutlined } from '@ant-design/icons';
+import { FaRetweet } from 'react-icons/fa';
+import { FcLike } from 'react-icons/fc';
+
 import { useHistory } from 'react-router-dom';
 
 import { Tweet, Type } from '../../../interfaces/Tweet';
@@ -38,8 +37,8 @@ export default function TweetMini({ content }: TweetMiniProps) {
         />
       }
       actions={[
-        <Button key="Like" shape="round" icon={<HeartOutlined />} />,
-        <Button key="Reply" shape="round" icon={<CommentOutlined />} />,
+        <Button key="Like" shape="round" icon={<FcLike />} />,
+        <Button key="Retweet" shape="round" icon={<FaRetweet />} />,
         <Button key="Share" shape="round" icon={<ShareAltOutlined />} />,
       ]}
     >

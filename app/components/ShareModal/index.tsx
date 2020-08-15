@@ -1,18 +1,23 @@
 import React from 'react';
-import { Modal } from 'antd';
+import { Modal, List, Button } from 'antd';
 import {
   WhatsappShareButton,
   TelegramShareButton,
   FacebookShareButton,
-  TelegramIcon,
 } from 'react-share';
-import { FacebookFilled, WhatsAppOutlined } from '@ant-design/icons';
+import {
+  FaClipboardCheck,
+  FaWhatsapp,
+  FaTelegram,
+  FaFacebook,
+} from 'react-icons/fa';
 
 type ShareModalProps = {
   url: string;
   visible: boolean;
   onOk: () => void;
   onCancel: () => void;
+  onCopy: () => void;
 };
 
 export default function ShareModal({
@@ -20,6 +25,7 @@ export default function ShareModal({
   visible,
   onOk,
   onCancel,
+  onCopy,
 }: ShareModalProps) {
   return (
     <Modal
@@ -32,15 +38,26 @@ export default function ShareModal({
         style: { display: 'none' },
       }}
     >
-      <WhatsappShareButton url={url}>
-        <WhatsAppOutlined />
-      </WhatsappShareButton>
-      <TelegramShareButton url={url}>
-        <TelegramIcon />
-      </TelegramShareButton>
-      <FacebookShareButton url={url}>
-        <FacebookFilled />
-      </FacebookShareButton>
+      <List>
+        <List.Item>
+          <WhatsappShareButton url={url}>
+            <FaWhatsapp />
+          </WhatsappShareButton>
+        </List.Item>
+        <List.Item>
+          <TelegramShareButton url={url}>
+            <FaTelegram />
+          </TelegramShareButton>
+        </List.Item>
+        <List.Item>
+          <FacebookShareButton url={url}>
+            <FaFacebook />
+          </FacebookShareButton>
+        </List.Item>
+        <List.Item>
+          <Button icon={<FaClipboardCheck />} onClick={() => onCopy()} />
+        </List.Item>
+      </List>
     </Modal>
   );
 }
