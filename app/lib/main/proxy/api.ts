@@ -78,6 +78,28 @@ router.get('/*', async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
+// /statuses/retweet/:id
+router.post(
+  '/statuses/retweet/:id',
+  async (req: Request, res: Response, next: NextFunction) => {
+    const url = req.path.replace(config.API_PATH, '');
+    console.log(`User Auth POST request: url: ${url}`);
+
+    if (TwitterClient.isAuth() && TwitterClient.isUserAuth()) {
+      try {
+        const data = await TwitterClient.twitterUser?.post(url, {});
+        res.send(data || {});
+        return;
+      } catch (err) {
+        errorHandler(err, res, next);
+      }
+    } else {
+      console.log(`Not logged in`);
+      res.status(500).send({ error: 'Not logged in' });
+    }
+  }
+);
+
 router.post('/*', async (req: Request, res: Response, next: NextFunction) => {
   const url = req.path.replace(config.API_PATH, '');
   console.log(`POST request: url: ${url} content: ${JSON.stringify(req.body)}`);
