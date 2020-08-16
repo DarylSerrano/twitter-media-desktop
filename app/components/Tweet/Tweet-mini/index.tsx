@@ -2,7 +2,8 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React from 'react';
-import { Card, Avatar, Button } from 'antd';
+import { useSelector } from 'react-redux';
+import { Card, Avatar, Button, notification } from 'antd';
 import { ShareAltOutlined } from '@ant-design/icons';
 import { FaRetweet } from 'react-icons/fa';
 import { FcLike } from 'react-icons/fc';
@@ -11,16 +12,38 @@ import { useHistory } from 'react-router-dom';
 
 import { Tweet, Type } from '../../../interfaces/Tweet';
 
+import postService from '../../../lib/renderer/postService';
+import { RootState } from '../../../store';
+
 const { Meta } = Card;
 
 type TweetMiniProps = { content: Tweet };
 
 export default function TweetMini({ content }: TweetMiniProps) {
   const history = useHistory();
+  const { loggedIn } = useSelector((state: RootState) => state.authetication);
 
   function clickImage() {
     history.push(`/status/${content.id_str}`);
   }
+
+  const onLike = async () => {
+    try {
+      await postService.likeTweet(content);
+      notification.success({ message: 'Liked' });
+    } catch (err) {
+      notification.error({ message: `${err.message}` });
+    }
+  };
+
+  const onRetweet = async () => {
+    try {
+      await postService.retweetTweet(content);
+      notification.success({ message: 'Retweeted' });
+    } catch (err) {
+      notification.error({ message: `${err.message}` });
+    }
+  };
 
   return (
     <Card
@@ -37,8 +60,20 @@ export default function TweetMini({ content }: TweetMiniProps) {
         />
       }
       actions={[
-        <Button key="Like" shape="round" icon={<FcLike />} />,
-        <Button key="Retweet" shape="round" icon={<FaRetweet />} />,
+        <Button
+          key="Like"
+          shape="round"
+          icon={<FcLike />}
+          onClick={onLike}
+          disabled={!loggedIn}
+        />,
+        <Button
+          key="Retweet"
+          shape="round"
+          icon={<FaRetweet />}
+          onClick={onRetweet}
+          disabled={!loggedIn}
+        />,
         <Button key="Share" shape="round" icon={<ShareAltOutlined />} />,
       ]}
     >

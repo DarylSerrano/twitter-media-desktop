@@ -26,7 +26,7 @@ function errorHandler(err: Error, res: Response, next: NextFunction) {
     }
   } else {
     // non-API error, e.g. network problem or invalid JSON in response
-    console.log(`Non api related error related, ${err}`);
+    console.log(`Non api related error related, ${JSON.stringify(err)}`);
     next(err);
   }
 }
@@ -88,6 +88,31 @@ router.post(
     if (TwitterClient.isAuth() && TwitterClient.isUserAuth()) {
       try {
         const data = await TwitterClient.twitterUser?.post(url, {});
+        res.send(data || {});
+        return;
+      } catch (err) {
+        errorHandler(err, res, next);
+      }
+    } else {
+      console.log(`Not logged in`);
+      res.status(500).send({ error: 'Not logged in' });
+    }
+  }
+);
+
+router.post(
+  '/favorites/create',
+  async (req: Request, res: Response, next: NextFunction) => {
+    const url = req.path.replace(config.API_PATH, '');
+    console.log(
+      `User Auth POST request: url: ${url} params: ${JSON.stringify(req.query)}`
+    );
+
+    if (TwitterClient.isAuth() && TwitterClient.isUserAuth()) {
+      try {
+        const data = await TwitterClient.twitterUser?.post(url, {
+          id: req.query.id,
+        });
         res.send(data || {});
         return;
       } catch (err) {

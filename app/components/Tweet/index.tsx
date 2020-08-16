@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Button, Card, notification, Descriptions } from 'antd';
 import ImageGallery from 'react-image-gallery';
 import { ShareAltOutlined, DownloadOutlined } from '@ant-design/icons';
@@ -27,10 +28,14 @@ import {
 
 import ShareModal from '../ShareModal';
 
+import postService from '../../lib/renderer/postService';
+import { RootState } from '../../store';
+
 type TweetProps = { content: Tweet };
 
 export default function Status({ content }: TweetProps) {
   const [modalVisible, setModalVisible] = useState(false);
+  const { loggedIn } = useSelector((state: RootState) => state.authetication);
 
   const onDownload = async () => {
     try {
@@ -76,9 +81,23 @@ export default function Status({ content }: TweetProps) {
     }
   };
 
-  const onLike = () => {};
+  const onLike = async () => {
+    try {
+      await postService.likeTweet(content);
+      notification.success({ message: 'Liked' });
+    } catch (err) {
+      notification.error({ message: `${err.message}` });
+    }
+  };
 
-  const onRetweet = () => {};
+  const onRetweet = async () => {
+    try {
+      await postService.retweetTweet(content);
+      notification.success({ message: 'Retweeted' });
+    } catch (err) {
+      notification.error({ message: `${err.message}` });
+    }
+  };
 
   return (
     <>
@@ -93,7 +112,7 @@ export default function Status({ content }: TweetProps) {
         title="Tweet"
         actions={[
           <Button
-            key="Reply"
+            key="Download"
             shape="round"
             onClick={() => onDownload()}
             icon={<DownloadOutlined />}
@@ -103,12 +122,14 @@ export default function Status({ content }: TweetProps) {
             onClick={onLike}
             shape="round"
             icon={<FcLike />}
+            disabled={!loggedIn}
           />,
           <Button
             key="Retweet"
             onClick={onRetweet}
             shape="round"
             icon={<FaRetweet />}
+            disabled={!loggedIn}
           />,
           <Button
             key="Share"
