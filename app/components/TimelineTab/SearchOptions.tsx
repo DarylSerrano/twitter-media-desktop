@@ -19,7 +19,6 @@ export default function SearchOptions({ onSubmit }: SearchOptionsProps) {
 
   const onFinish = (values) => {
     const l = values;
-    console.log(l);
     onSubmit(values);
   };
 

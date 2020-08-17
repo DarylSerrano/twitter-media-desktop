@@ -29,8 +29,6 @@ export default async function downloadHandler(
         message: `Sucess downloading ${mediaUrls.length} files`,
       };
 
-      console.log(`Donwloaded files: ${mediaUrls.length}`);
-
       return response;
     }
     const response: DownloadResponse = {

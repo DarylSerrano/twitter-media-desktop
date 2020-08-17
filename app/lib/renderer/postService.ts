@@ -19,8 +19,6 @@ async function makeFetch<T>(url: string, options?: FetchOptions) {
 
   const body: T = await response.json();
 
-  console.log(`Search makeFetch: ${JSON.stringify(body)}`);
-
   return body;
 }
 

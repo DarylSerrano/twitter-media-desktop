@@ -44,8 +44,6 @@ export default function Timeline({
       count,
     });
 
-    console.log(JSON.stringify(response.data));
-
     setResposeData(response.data);
     setfetchState(FetchState.FETCHED);
     setMaxId(response.maxId);

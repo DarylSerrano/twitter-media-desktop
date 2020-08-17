@@ -12,8 +12,6 @@ async function makeFetch<T>(url: string) {
 
   const body: T = await response.json();
 
-  console.log(`Search makeFetch: ${body}`);
-
   return body;
 }
 
@@ -43,8 +41,6 @@ const getUser = async (param: GetUserParams): Promise<User> => {
   if (param.userId) url.searchParams.append('user_id', param.userId.toString());
   if (param.screenName)
     url.searchParams.append('screen_name', param.screenName.toString());
-
-  console.log(`anysearch: ${url.toString()}`);
 
   return makeFetch<User>(url.toString());
 };

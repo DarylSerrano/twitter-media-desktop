@@ -1,4 +1,5 @@
 import { Response, Request, Router, NextFunction } from 'express';
+import log from 'electron-log';
 import TwitterClient from './TwitterClient';
 import config from './ProxyConfig';
 
@@ -17,16 +18,16 @@ function errorHandler(err: Error, res: Response, next: NextFunction) {
     const twitterApiError = err as TwitterAPIError;
     if (twitterApiError.errors[0].code === 88) {
       // rate limit exceeded
-      console.log('Rate limit');
+      log.error('Rate limit');
       res.status(500).send({ message: twitterApiError.message });
     } else {
       // some other kind of error, e.g. read-only API trying to POST
-      console.log(`Other error: ${JSON.stringify(err)}`);
+      log.error(`Other error: ${JSON.stringify(err)}`);
       res.status(500).send({ message: twitterApiError.message });
     }
   } else {
     // non-API error, e.g. network problem or invalid JSON in response
-    console.log(`Non api related error related, ${JSON.stringify(err)}`);
+    log.error(`Non api related error related, ${JSON.stringify(err)}`);
     next(err);
   }
 }
@@ -37,9 +38,6 @@ const authGetHandler = async (
   next: NextFunction
 ) => {
   const url = req.path.replace(config.API_PATH, '');
-  console.log(
-    `User Auth Get request: url: ${url} params: ${JSON.stringify(req.query)}`
-  );
 
   if (TwitterClient.isAuth() && TwitterClient.isUserAuth()) {
     try {
@@ -50,7 +48,7 @@ const authGetHandler = async (
       errorHandler(err, res, next);
     }
   } else {
-    console.log(`Not logged in`);
+    log.error(`Not logged in`);
     res.status(500).send({ error: 'Not logged in' });
   }
 };
@@ -62,7 +60,6 @@ router.get('/users/search', authGetHandler);
 
 router.get('/*', async (req: Request, res: Response, next: NextFunction) => {
   const url = req.path.replace(config.API_PATH, '');
-  console.log(`Get request: url: ${url} params: ${JSON.stringify(req.query)}`);
 
   if (TwitterClient.isAuth()) {
     try {
@@ -73,7 +70,7 @@ router.get('/*', async (req: Request, res: Response, next: NextFunction) => {
       errorHandler(err, res, next);
     }
   } else {
-    console.log(`Not logged in`);
+    log.error(`Not logged in`);
     res.status(500).send({ error: 'Not logged in' });
   }
 });
@@ -83,7 +80,6 @@ router.post(
   '/statuses/retweet/:id',
   async (req: Request, res: Response, next: NextFunction) => {
     const url = req.path.replace(config.API_PATH, '');
-    console.log(`User Auth POST request: url: ${url}`);
 
     if (TwitterClient.isAuth() && TwitterClient.isUserAuth()) {
       try {
@@ -94,7 +90,7 @@ router.post(
         errorHandler(err, res, next);
       }
     } else {
-      console.log(`Not logged in`);
+      log.error(`Not logged in`);
       res.status(500).send({ error: 'Not logged in' });
     }
   }
@@ -104,9 +100,6 @@ router.post(
   '/favorites/create',
   async (req: Request, res: Response, next: NextFunction) => {
     const url = req.path.replace(config.API_PATH, '');
-    console.log(
-      `User Auth POST request: url: ${url} params: ${JSON.stringify(req.query)}`
-    );
 
     if (TwitterClient.isAuth() && TwitterClient.isUserAuth()) {
       try {
@@ -119,7 +112,7 @@ router.post(
         errorHandler(err, res, next);
       }
     } else {
-      console.log(`Not logged in`);
+      log.error(`Not logged in`);
       res.status(500).send({ error: 'Not logged in' });
     }
   }
@@ -127,7 +120,6 @@ router.post(
 
 router.post('/*', async (req: Request, res: Response, next: NextFunction) => {
   const url = req.path.replace(config.API_PATH, '');
-  console.log(`POST request: url: ${url} content: ${JSON.stringify(req.body)}`);
 
   if (TwitterClient.isAuth()) {
     try {
@@ -138,7 +130,7 @@ router.post('/*', async (req: Request, res: Response, next: NextFunction) => {
       errorHandler(err, res, next);
     }
   } else {
-    console.log(`Not logged in`);
+    log.error(`Not logged in`);
     res.status(500).send({ error: 'Not logged in' });
   }
 });

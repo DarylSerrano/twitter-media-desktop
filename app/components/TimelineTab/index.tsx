@@ -39,7 +39,6 @@ export default function TimelineTab() {
 
   const onSearchSubmit = (values: FormValues) => {
     setSeach(values);
-    console.log(values);
   };
 
   const expandSelectUser = (isExpanded: boolean) => {
@@ -48,7 +47,6 @@ export default function TimelineTab() {
 
   const onSelectUser = (user: User) => {
     setUserSelected(user);
-    console.log(`Selected user: ${user}`);
     expandSelectUser(false);
   };
 
@@ -87,7 +85,6 @@ export default function TimelineTab() {
       setErrorMsg('');
       setUserSelectorPage(0);
     } catch (error) {
-      console.log('Error');
       setHasError(true);
       setErrorMsg(error.message);
     }
