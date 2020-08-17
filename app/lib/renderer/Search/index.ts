@@ -44,6 +44,8 @@ const getUser = async (param: GetUserParams): Promise<User> => {
   if (param.screenName)
     url.searchParams.append('screen_name', param.screenName.toString());
 
+  console.log(`anysearch: ${url.toString()}`);
+
   return makeFetch<User>(url.toString());
 };
 

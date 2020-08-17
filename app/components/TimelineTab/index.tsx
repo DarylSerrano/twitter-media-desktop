@@ -31,6 +31,7 @@ export default function TimelineTab() {
   const [userSelected, setUserSelected] = useState<User | undefined>(undefined);
   const [usersGetted, setUsersGetted] = useState<User[]>([]);
 
+  const [userSelectorPage, setUserSelectorPage] = useState(0);
   const [selectUserExpanded, setSelectUserExpanded] = useState('');
 
   const [errorMsg, setErrorMsg] = useState<string>('');
@@ -59,6 +60,7 @@ export default function TimelineTab() {
             userId: search.searchData,
           });
           setUserSelected(user);
+          expandSelectUser(false);
           break;
         }
         case 'screenName': {
@@ -66,12 +68,16 @@ export default function TimelineTab() {
             screenName: search.searchData,
           });
           setUserSelected(user);
+          expandSelectUser(false);
           break;
         }
         case 'any': {
-          const users = await searchService.searchAnyuser(search.searchData);
+          const users = await searchService.searchAnyuser(search.searchData, {
+            page: userSelectorPage,
+          });
           setUsersGetted(users);
           expandSelectUser(true);
+          setUserSelected(undefined);
           break;
         }
         default:
@@ -79,11 +85,20 @@ export default function TimelineTab() {
       }
       setHasError(false);
       setErrorMsg('');
+      setUserSelectorPage(0);
     } catch (error) {
       console.log('Error');
       setHasError(true);
       setErrorMsg(error.message);
     }
+  };
+
+  const onLoadMoreUser = async () => {
+    const users = await searchService.searchAnyuser(search.searchData, {
+      page: userSelectorPage,
+    });
+    if (users.length > 0) setUserSelectorPage(userSelectorPage + 1);
+    setUsersGetted((oldUsers) => [...oldUsers, ...users]);
   };
 
   useEffect(() => {
@@ -117,7 +132,11 @@ export default function TimelineTab() {
           <SearchOptions onSubmit={onSearchSubmit} />
           <Collapse activeKey={selectUserExpanded}>
             <Panel header="Select user" key="userSelect">
-              <SelectorUser users={usersGetted} onSelect={onSelectUser} />
+              <SelectorUser
+                onLoadMore={onLoadMoreUser}
+                users={usersGetted}
+                onSelect={onSelectUser}
+              />
             </Panel>
           </Collapse>
         </Panel>
