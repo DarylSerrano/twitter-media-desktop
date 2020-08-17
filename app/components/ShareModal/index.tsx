@@ -1,10 +1,12 @@
 import React from 'react';
-import { Modal, List, Button } from 'antd';
+import { Modal, Button, Row, Col } from 'antd';
+
 import {
   WhatsappShareButton,
   TelegramShareButton,
   FacebookShareButton,
 } from 'react-share';
+
 import {
   FaClipboardCheck,
   FaWhatsapp,
@@ -27,6 +29,10 @@ export default function ShareModal({
   onCancel,
   onCopy,
 }: ShareModalProps) {
+  const style = { padding: '8px 0' };
+
+  const iconSize = '2em';
+
   return (
     <Modal
       title="Share"
@@ -34,30 +40,45 @@ export default function ShareModal({
       onOk={onOk}
       onCancel={onCancel}
       visible={visible}
+      okButtonProps={{
+        style: { display: 'none' },
+      }}
       cancelButtonProps={{
         style: { display: 'none' },
       }}
     >
-      <List>
-        <List.Item>
-          <WhatsappShareButton url={url}>
-            <FaWhatsapp />
-          </WhatsappShareButton>
-        </List.Item>
-        <List.Item>
-          <TelegramShareButton url={url}>
-            <FaTelegram />
-          </TelegramShareButton>
-        </List.Item>
-        <List.Item>
-          <FacebookShareButton url={url}>
-            <FaFacebook />
-          </FacebookShareButton>
-        </List.Item>
-        <List.Item>
-          <Button icon={<FaClipboardCheck />} onClick={() => onCopy()} />
-        </List.Item>
-      </List>
+      <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+        <Col className="gutter-row" span={6}>
+          <div style={style}>
+            <WhatsappShareButton url={url}>
+              <FaWhatsapp size={iconSize} />
+            </WhatsappShareButton>
+          </div>
+        </Col>
+        <Col className="gutter-row" span={6}>
+          <div style={style}>
+            <TelegramShareButton url={url}>
+              <FaTelegram size={iconSize} />
+            </TelegramShareButton>
+          </div>
+        </Col>
+        <Col className="gutter-row" span={6}>
+          <div style={style}>
+            <FacebookShareButton url={url}>
+              <FaFacebook size={iconSize} />
+            </FacebookShareButton>
+          </div>
+        </Col>
+        <Col className="gutter-row" span={6}>
+          <div style={style}>
+            <Button
+              icon={<FaClipboardCheck size={iconSize} />}
+              style={{ borderStyle: 'none' }}
+              onClick={() => onCopy()}
+            />
+          </div>
+        </Col>
+      </Row>
     </Modal>
   );
 }
