@@ -20,13 +20,13 @@ yarn package
 
 # Caveats
 
-- You must have Twitter App keys.
-- For supporting user login in your callback urls, in your Twitter App settings you must enable 3rd party authentication and allowing the callback url:
+* You must have Twitter App keys.
+* For supporting user login in your callback urls, in your Twitter App settings you must enable 3rd party authentication and allowing the callback url:
   `http://127.0.0.1:4200/login/callback`
 
-- Make sure that your twitter application has Read and Write permissions
+* Make sure that your twitter application has Read and Write permissions
 
-- There is a file where api keys are stored on, `API_KEYS.json` file containing api keys, an example of the file:
+* There is a file where api keys are stored on, `API_KEYS.json` file containing api keys, an example of the file:
 
 ```json
 {
@@ -35,8 +35,8 @@ yarn package
 }
 ```
 
-- On windows, usually the path is: `C:\Users\<YOUR_USERNAME>\AppData\Roaming\Electron\storage`
-- On Linux, usually the path is: `$HOME/.config/Electron/storage/`
+* On windows, usually the path is: `C:\Users\<YOUR_USERNAME>\AppData\Roaming\Electron\storage`
+* On Linux, usually the path is: `$HOME/.config/Electron/storage/`
 
 # License
 
