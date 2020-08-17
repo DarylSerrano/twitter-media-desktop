@@ -1,7 +1,7 @@
 {
   "name": "twitter-media-desktop",
   "productName": "Twitter Media Desktop",
-  "version": "1.2.0",
+  "version": "0.1.0",
   "description": "Twitter desktop app for displaying media only",
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
