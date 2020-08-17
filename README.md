@@ -1,15 +1,32 @@
 # Twitter Media Desktop
 
-Desktop app for displaying media only.
+Twitter desktop app for displaying media only.
 
 Made with [electron-react-boilerplate ver 1.2.0](https://github.com/electron-react-boilerplate/electron-react-boilerplate)
 
+# Install
+
+# Development
+
+```bash
+yarn dev
+```
+
+# Packaging for Production
+
+```
+yarn package
+```
+
 # Caveats
 
-You must have twitter App keys and for supporting user login in your callback urls, you must allow:
-`http://127.0.0.1:4200/login/callback`
+- You must have Twitter App keys.
+- For supporting user login in your callback urls, in your Twitter App settings you must enable 3rd party authentication and allowing the callback url:
+  `http://127.0.0.1:4200/login/callback`
 
-There is a file where api keys are stored on, `API_KEYS.json` file containing api keys, an example of the file:
+- Make sure that your twitter application has Read and Write permissions
+
+- There is a file where api keys are stored on, `API_KEYS.json` file containing api keys, an example of the file:
 
 ```json
 {
@@ -21,14 +38,6 @@ There is a file where api keys are stored on, `API_KEYS.json` file containing ap
 - On windows, usually the path is: `C:\Users\<YOUR_USERNAME>\AppData\Roaming\Electron\storage`
 - On Linux, usually the path is: `$HOME/.config/Electron/storage/`
 
-Make sure that your twitter application has Read and Write permissions
+# License
 
-# Install
-
-# Development
-
-```bash
-yarn dev
-```
-
-# Packaging
+[MIT](https://github.com/DarylSerrano/twitter-media-desktop/blob/master/LICENSE)
