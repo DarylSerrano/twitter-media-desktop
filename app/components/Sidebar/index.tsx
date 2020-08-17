@@ -46,8 +46,10 @@ export default function Sidebar() {
         left: 0,
       }}
     >
-      <div className={loggedIn ? styles.logo : styles.logoLoggedIn}>
-        {loggedIn ? `Logged as: ${userName} with id: ${userId}` : null}
+      <div className={styles.logo}>
+        <p style={{ color: 'white' }}>
+          {loggedIn ? `Logged as: ${userName}` : null}
+        </p>
       </div>
       <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
         <Menu.Item key="1" icon={<HomeOutlined />}>
