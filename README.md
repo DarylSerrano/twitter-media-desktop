@@ -6,7 +6,7 @@ Made with [electron-react-boilerplate ver 1.2.0](https://github.com/electron-rea
 
 ## Install
 
-Just download windows or linux verion from latest release, unzip and start the application
+Just download the [latest](https://github.com/DarylSerrano/twitter-media-desktop/releases) windows or linux release, unzip and start the application.
 
 ## Development
 
