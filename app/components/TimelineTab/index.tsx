@@ -137,7 +137,10 @@ export default function TimelineTab() {
             </Panel>
           </Collapse>
         </Panel>
-        <Panel header="Timeline" key="2">
+        <Panel
+          header={userSelected ? `Tweets of: ${userSelected.name}` : `Tweets`}
+          key="2"
+        >
           {hasError || !userSelected ? (
             <Skeleton active />
           ) : (

@@ -5,7 +5,6 @@ import { Layout, Menu } from 'antd';
 import { ipcRenderer } from 'electron';
 import {
   UnorderedListOutlined,
-  HomeOutlined,
   LoginOutlined,
   LogoutOutlined,
 } from '@ant-design/icons';
@@ -52,15 +51,12 @@ export default function Sidebar() {
         </p>
       </div>
       <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-        <Menu.Item key="1" icon={<HomeOutlined />}>
-          <Link to={routes.HOME}>Home</Link>
-        </Menu.Item>
-        <Menu.Item key="2" icon={<UnorderedListOutlined />}>
-          <Link to={routes.TIMELINE}>Timelines</Link>
+        <Menu.Item key="1" icon={<UnorderedListOutlined />}>
+          <Link to={routes.HOME}>Tweets</Link>
         </Menu.Item>
         <Menu.Item
           onClick={onLoginLogout}
-          key="4"
+          key="2"
           icon={loggedIn ? <LogoutOutlined /> : <LoginOutlined />}
         >
           {loggedIn ? `Logout` : `Login`}

@@ -18,7 +18,7 @@ export default function TimelinePage() {
         tab={
           <span>
             <SearchOutlined />
-            Search
+            Search user tweets
           </span>
         }
         key="Search"

@@ -1,5 +1,4 @@
 {
   "HOME": "/",
-  "TIMELINE": "/timeline",
   "STATUS": "/status/:id"
 }
