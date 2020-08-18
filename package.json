@@ -53,7 +53,7 @@
   },
   "build": {
     "productName": "TwitterMediaDesktop",
-    "appId": "org.electron.TwitterMediaDesktop",
+    "appId": "org.darylserrano.TwitterMediaDesktop",
     "files": [
       "dist/",
       "node_modules/",
@@ -78,18 +78,12 @@
     },
     "win": {
       "target": [
-        "nsis",
-        "msi",
         "portable",
         "zip"
       ]
     },
     "linux": {
       "target": [
-        "deb",
-        "rpm",
-        "AppImage",
-        "pacman",
         "zip"
       ],
       "category": "Network"
@@ -102,7 +96,7 @@
       "provider": "github",
       "owner": "DarylSerrano",
       "repo": "twitter-media-desktop",
-      "private": false
+      "private": true
     }
   },
   "repository": {
