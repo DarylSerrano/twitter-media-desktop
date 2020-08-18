@@ -1,6 +1,6 @@
 {
   "name": "twitter-media-desktop",
-  "productName": "Twitter Media Desktop",
+  "productName": "TwitterMediaDesktop",
   "version": "0.1.0",
   "description": "Twitter desktop app for displaying media only",
   "main": "./main.prod.js",

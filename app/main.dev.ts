@@ -96,6 +96,11 @@ const createWindow = async () => {
     }
 
     WindowManager.addWindow(MAIN_WINDOW_ID, mainWindow);
+
+    // Setup donwloader listener
+    setupDownloadListener(downloaderListener);
+
+    setUpAuthenticationListener();
   });
 
   mainWindow.on('closed', () => {
@@ -129,8 +134,3 @@ app.on('activate', () => {
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) createWindow();
 });
-
-// Setup donwloader listener
-setupDownloadListener(downloaderListener);
-
-setUpAuthenticationListener();
