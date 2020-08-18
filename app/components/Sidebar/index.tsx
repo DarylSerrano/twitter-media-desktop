@@ -23,7 +23,7 @@ const { Sider } = Layout;
 export default function Sidebar() {
   const dispatch = useDispatch();
 
-  const { loggedIn, userId, userName } = useSelector(
+  const { loggedIn, userName } = useSelector(
     (state: RootState) => state.authetication
   );
 

@@ -17,9 +17,9 @@ export default function SearchOptions({ onSubmit }: SearchOptionsProps) {
   const { loggedIn } = useSelector((state: RootState) => state.authetication);
   const [form] = Form.useForm();
 
-  const onFinish = (values) => {
-    const l = values;
-    onSubmit(values);
+  const onFinish = (values: unknown) => {
+    const val = values as FormValues;
+    onSubmit(val);
   };
 
   const onReset = () => {
