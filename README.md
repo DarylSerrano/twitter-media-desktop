@@ -1,10 +1,18 @@
 # Twitter Media Desktop
 
-Twitter desktop app for filtering media type tweets only.
+Twitter desktop app for filtering tweets that have images or video only.
 
 Made with [electron-react-boilerplate ver 1.2.0](https://github.com/electron-react-boilerplate/electron-react-boilerplate)
 
-![Mini preview](images/demo.gif)
+![Mini preview](https://i.imgur.com/3xw3GfX.gif)
+
+## Features
+
+- Like and retweet.
+- Search users and filter for media only tweets.
+- Filter the timeline of user logged in.
+- Share tweet.
+- Download tweet images/video.
 
 ## Install
 
@@ -36,7 +44,10 @@ On Linux, usually the path is:
 ## Development
 
 ```bash
-yarn dev
+$ git clone https://github.com/DarylSerrano/twitter-media-desktop.git
+$ cd twitter-media-desktop
+$ yarn
+$ yarn dev
 ```
 
 Paths api keys on development mode:
@@ -50,6 +61,10 @@ Paths api keys on development mode:
 yarn package
 ```
 
+## Contribute
+
+This is a personal project but feel free to contribute (PR-s and issues are welcomed).
+
 ## License
 
-[MIT](https://github.com/DarylSerrano/twitter-media-desktop/blob/master/LICENSE)
+[MIT license](https://github.com/DarylSerrano/twitter-media-desktop/blob/master/LICENSE)
