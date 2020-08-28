@@ -1,24 +1,37 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { Layout, Menu } from 'antd';
 import { ipcRenderer } from 'electron';
 import {
   UnorderedListOutlined,
-  HomeOutlined,
-  SearchOutlined,
   LoginOutlined,
+  LogoutOutlined,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
 import routes from '../../constants/routes.json';
 import styles from './sidebar.css';
-import { CHANNEL_NAME } from '../../interfaces/Login';
+import { LOGIN_CHANNEL_NAME } from '../../interfaces/Login';
+import { RootState } from '../../store';
+
+import { logoutUser } from '../../reducers/authenticationReducer';
 
 const { Sider } = Layout;
 
 export default function Sidebar() {
-  const onLogin = async () => {
-    await ipcRenderer.invoke(CHANNEL_NAME);
+  const dispatch = useDispatch();
+
+  const { loggedIn, userName } = useSelector(
+    (state: RootState) => state.authetication
+  );
+
+  const onLoginLogout = async () => {
+    if (loggedIn) {
+      dispatch(logoutUser());
+    } else {
+      await ipcRenderer.invoke(LOGIN_CHANNEL_NAME);
+    }
   };
 
   return (
@@ -32,19 +45,21 @@ export default function Sidebar() {
         left: 0,
       }}
     >
-      <div className={styles.logo} />
+      <div className={styles.logo}>
+        <p style={{ color: 'white' }}>
+          {loggedIn ? `Logged as: ${userName}` : null}
+        </p>
+      </div>
       <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-        <Menu.Item key="1" icon={<HomeOutlined />}>
-          <Link to={routes.HOME}>Home</Link>
+        <Menu.Item key="1" icon={<UnorderedListOutlined />}>
+          <Link to={routes.HOME}>Tweets</Link>
         </Menu.Item>
-        <Menu.Item key="2" icon={<SearchOutlined />}>
-          Seach
-        </Menu.Item>
-        <Menu.Item key="3" icon={<UnorderedListOutlined />}>
-          <Link to={routes.TIMELINE}>Timelines</Link>
-        </Menu.Item>
-        <Menu.Item onClick={onLogin} key="4" icon={<LoginOutlined />}>
-          Login
+        <Menu.Item
+          onClick={onLoginLogout}
+          key="2"
+          icon={loggedIn ? <LogoutOutlined /> : <LoginOutlined />}
+        >
+          {loggedIn ? `Logout` : `Login`}
         </Menu.Item>
       </Menu>
     </Sider>

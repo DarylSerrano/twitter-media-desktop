@@ -9,14 +9,16 @@
  * `./app/main.prod.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import createServer from './lib/main/proxy/server';
-import { setupListener } from './lib/main/downloader';
-import { CHANNEL_NAME } from './interfaces/Login';
-import TwitterClient from './lib/main/proxy/TwitterClient';
+import downloaderListener from './lib/main/downloader';
+import setUpAuthenticationListener from './ipc/main/authenticationIpc';
+import setupDownloadListener from './ipc/main/downloader';
+import WindowManager from './lib/main/WindowService';
+import MAIN_WINDOW_ID from './interfaces/MainWindow';
 
 // Create twitter proxy server
 createServer();
@@ -65,6 +67,7 @@ const createWindow = async () => {
     show: false,
     width: 1024,
     height: 728,
+    title: 'Twitter Media Desktop',
     webPreferences:
       (process.env.NODE_ENV === 'development' ||
         process.env.E2E_BUILD === 'true') &&
@@ -91,6 +94,13 @@ const createWindow = async () => {
       mainWindow.show();
       mainWindow.focus();
     }
+
+    WindowManager.addWindow(MAIN_WINDOW_ID, mainWindow);
+
+    // Setup donwloader listener
+    setupDownloadListener(downloaderListener);
+
+    setUpAuthenticationListener();
   });
 
   mainWindow.on('closed', () => {
@@ -123,14 +133,4 @@ app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) createWindow();
-});
-
-// Setup donwloader listener
-setupListener();
-
-// setupSucessLoginHandler
-ipcMain.handle(CHANNEL_NAME, async () => {
-  await TwitterClient.userLogin();
-
-  return 'Ok';
 });

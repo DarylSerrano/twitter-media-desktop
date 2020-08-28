@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Button, Card, notification } from 'antd';
+import { useSelector } from 'react-redux';
+import { Button, Card, notification, Descriptions } from 'antd';
 import ImageGallery from 'react-image-gallery';
-import {
-  ShareAltOutlined,
-  DownloadOutlined,
-  CopyOutlined,
-} from '@ant-design/icons';
+import { ShareAltOutlined, DownloadOutlined } from '@ant-design/icons';
+
+import { FaRetweet } from 'react-icons/fa';
+import { FcLike } from 'react-icons/fc';
+
 import { ipcRenderer, clipboard } from 'electron';
 import ResponsivePlayer from '../ResponsivePlayer';
 
@@ -27,10 +28,14 @@ import {
 
 import ShareModal from '../ShareModal';
 
+import postService from '../../lib/renderer/postService';
+import { RootState } from '../../store';
+
 type TweetProps = { content: Tweet };
 
 export default function Status({ content }: TweetProps) {
   const [modalVisible, setModalVisible] = useState(false);
+  const { loggedIn } = useSelector((state: RootState) => state.authetication);
 
   const onDownload = async () => {
     try {
@@ -76,6 +81,24 @@ export default function Status({ content }: TweetProps) {
     }
   };
 
+  const onLike = async () => {
+    try {
+      await postService.likeTweet(content);
+      notification.success({ message: 'Liked' });
+    } catch (err) {
+      notification.error({ message: `${err.message}` });
+    }
+  };
+
+  const onRetweet = async () => {
+    try {
+      await postService.retweetTweet(content);
+      notification.success({ message: 'Retweeted' });
+    } catch (err) {
+      notification.error({ message: `${err.message}` });
+    }
+  };
+
   return (
     <>
       <ShareModal
@@ -83,34 +106,37 @@ export default function Status({ content }: TweetProps) {
         onOk={() => setModalVisible(false)}
         onCancel={() => setModalVisible(false)}
         visible={modalVisible}
+        onCopy={onCopy}
       />
       <Card
-        title={content.id_str}
+        title="Tweet"
         actions={[
           <Button
-            key="Reply"
+            key="Download"
             shape="round"
             onClick={() => onDownload()}
             icon={<DownloadOutlined />}
-          >
-            Download
-          </Button>,
+          />,
+          <Button
+            key="Like"
+            onClick={onLike}
+            shape="round"
+            icon={<FcLike />}
+            disabled={!loggedIn}
+          />,
+          <Button
+            key="Retweet"
+            onClick={onRetweet}
+            shape="round"
+            icon={<FaRetweet />}
+            disabled={!loggedIn}
+          />,
           <Button
             key="Share"
             shape="round"
             onClick={() => setModalVisible(true)}
             icon={<ShareAltOutlined />}
-          >
-            Share
-          </Button>,
-          <Button
-            key="Copy"
-            onClick={onCopy}
-            shape="round"
-            icon={<CopyOutlined />}
-          >
-            Copy
-          </Button>,
+          />,
         ]}
       >
         {hasVideo(content) ? (
@@ -118,6 +144,11 @@ export default function Status({ content }: TweetProps) {
         ) : (
           <ImageGallery items={getGalleryData(content)} />
         )}
+        <Descriptions layout="vertical" column={1}>
+          <Descriptions.Item style={{ textAlign: 'justify' }}>
+            {content.text}
+          </Descriptions.Item>
+        </Descriptions>
       </Card>
     </>
   );
