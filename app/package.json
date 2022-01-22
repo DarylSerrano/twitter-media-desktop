@@ -19,7 +19,7 @@
     "cors": "^2.8.5",
     "errorhandler": "^1.5.1",
     "express": "^4.17.1",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^3.1.1",
     "twitter-lite": "^0.14.0"
   },
   "devDependencies": {
